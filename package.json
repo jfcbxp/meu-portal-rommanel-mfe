@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "commit": "git-cz",
-    "dev": "export NEXT_PRIVATE_LOCAL_WEBPACK=true && next dev -p 3006",
+    "dev": "SET NEXT_PRIVATE_LOCAL_WEBPACK=true && next dev -p 3006",
     "build": "export NEXT_PRIVATE_LOCAL_WEBPACK=true && node envs.js && next build",
-    "format": "prettier \"src/**/*.{ts, tsx, json}\" --write",
-    "start": "export NEXT_PRIVATE_LOCAL_WEBPACK=true && export NODE_ENV=production && next start -p 3006",
+    "format": "prettier 'src/app/**/*.{ts,tsx,json}' --write",
+    "start": "SET NEXT_PRIVATE_LOCAL_WEBPACK=true && export NODE_ENV=production && next start -p 3006",
     "deploy": "bash deploy.bash",
     "lint": "next lint",
     "release": "standard-version",
@@ -24,11 +24,13 @@
     "prettier-eslint": "16.4.1",
     "prettier-eslint-cli": "8.0.1",
     "@emotion/styled": "^11.14.0",
-    "@module-federation/nextjs-mf": "8.8.26",
     "date-fns": "^3.6.0",
-    "next": "15.3.1"
+    "next": "15.3.1",
+    "webpack": "5.99.7"
   },
   "devDependencies": {
+    "@tanstack/react-query": "5.74.11",
+    "@next/third-parties": "15.3.1",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@emotion/react": "^11.10.0",
