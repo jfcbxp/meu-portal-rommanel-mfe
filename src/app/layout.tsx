@@ -4,7 +4,8 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from '@/styles/GlobalStyle';
 import theme from '@/styles/theme';
-
+import Provider from '@/contexts/PrimeReactContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 import StyledComponentsRegistry from 'src/lib/registry';
 
 const inter = Inter({
@@ -20,12 +21,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable}`}>
-        <StyledComponentsRegistry>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            {children}
-          </ThemeProvider>
-        </StyledComponentsRegistry>
+        <AuthProvider>
+          <Provider>
+            <StyledComponentsRegistry>
+              <ThemeProvider theme={theme}>
+                <GlobalStyle />
+                {children}
+              </ThemeProvider>
+            </StyledComponentsRegistry>
+          </Provider>
+        </AuthProvider>
       </body>
     </html>
   );
