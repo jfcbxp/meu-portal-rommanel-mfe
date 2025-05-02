@@ -1,19 +1,18 @@
-"use client";
+'use client';
 
 import React from 'react';
-import { PrimeReactProvider } from "primereact/api";
+import { PrimeReactProvider } from 'primereact/api';
 // Remove Tailwind preset import
 
 interface LayoutProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export default function Provider({ children }: LayoutProps) {
-    return (
-        // Set unstyled to true, remove pt: Tailwind
-        <PrimeReactProvider value={{ unstyled: true }}>
-            {children}
-        </PrimeReactProvider>
-    );
+  return (
+    // Set unstyled to true, remove pt: Tailwind
+    <PrimeReactProvider value={{ unstyled: true }}>
+      {children}
+    </PrimeReactProvider>
+  );
 }
-
