@@ -1,11 +1,14 @@
 'use client';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
-export default function Index() {
-  const router = useRouter();
+import React, { Suspense } from 'react';
+import DynamicRouter from './DynamicRouter';
 
-  useEffect(() => {
-    router.push('/login');
-  }, [router]);
+export default function MainApp() {
+  const currentPage = 'login';
+
+  return (
+    <Suspense fallback={<p>Carregando...</p>}>
+      <DynamicRouter page={currentPage} />
+    </Suspense>
+  );
 }
