@@ -1,0 +1,78 @@
+import { Boleto } from '../types';
+
+export const mockBoletos: Boleto[] = [
+  {
+    id: '000000001',
+    compra: 'Compra Mario Covas',
+    valor: '34,30',
+    quantidadeItens: 1,
+    status: 'Pago',
+    data: '2024-07-16',
+    fornecedor: 'Mario Covas',
+    itens: [
+      {
+        id: '5520231600',
+        descricao: 'Descricao do Produto',
+        quantidade: 1,
+        valor: '14,30',
+        imagemUrl: '/placeholder-image.png',
+      },
+      {
+        id: '5520411900',
+        descricao: 'Descrição do Produto',
+        quantidade: 1,
+        valor: '10,00',
+        imagemUrl: '/placeholder-image.png',
+      },
+    ],
+    formaPagamento: 'Boleto',
+    codigoBarras: '12345678901234567890123456789012345678901234',
+  },
+  {
+    id: '000000002',
+    compra: 'Compra Loja Exemplo',
+    valor: '150,50',
+    quantidadeItens: 3,
+    status: 'Pendente',
+    data: '2024-07-15',
+    fornecedor: 'Loja Exemplo',
+    itens: [
+      {
+        id: '9876543210',
+        descricao: 'Produto A',
+        quantidade: 2,
+        valor: '50,25',
+        imagemUrl: '/placeholder-image.png',
+      },
+      {
+        id: '1231231231',
+        descricao: 'Produto B',
+        quantidade: 1,
+        valor: '50,00',
+        imagemUrl: '/placeholder-image.png',
+      },
+    ],
+    formaPagamento: 'Boleto',
+    codigoBarras: '98765432109876543210987654321098765432109876',
+  },
+  {
+    id: '000000003',
+    compra: 'Outra Compra',
+    valor: '75,00',
+    quantidadeItens: 1,
+    status: 'Pago',
+    data: '2024-06-20',
+    fornecedor: 'Outro Fornecedor',
+    itens: [
+      {
+        id: '1122334455',
+        descricao: 'Produto C',
+        quantidade: 1,
+        valor: '75,00',
+        imagemUrl: '/placeholder-image.png',
+      },
+    ],
+    formaPagamento: 'Boleto',
+    codigoBarras: '11223344551122334455112233445511223344551122',
+  },
+];
