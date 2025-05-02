@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button as PrimeButton } from 'primereact/button';
@@ -10,6 +10,7 @@ import { Image as PrimeImage } from 'primereact/image';
 import { Toast } from 'primereact/toast';
 import { mockBoletos } from '@/utils/mock';
 import { Boleto, BoletoItem } from '@/types/index';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Styled Components
 const PageContainer = styled.div`
@@ -214,12 +215,19 @@ const CopyButton = styled(PrimeButton)`
   }
 `;
 
-export default function BoletoDetailPage() {
+function BoletoDetailContent() {
   const params = useSearchParams();
   const id = params.get('id');
   const router = useRouter();
   const toast = useRef<Toast>(null);
   const [boleto, setBoleto] = useState(null);
+  const { token } = useAuth();
+
+  useEffect(() => {
+    if (!token) {
+      router.push('/login'); // Redireciona para a página de login se não houver token
+    }
+  }, [token, router]);
 
   useEffect(() => {
     if (!id) {
@@ -366,5 +374,13 @@ export default function BoletoDetailPage() {
         </PaymentMethodContainer>
       </ContentWrapper>
     </PageContainer>
+  );
+}
+
+export default function BoletoDetailPage() {
+  return (
+    <Suspense fallback={<p>Carregando...</p>}>
+      <BoletoDetailContent />
+    </Suspense>
   );
 }
