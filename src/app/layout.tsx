@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
+'use client';
+
 import { Inter } from 'next/font/google';
-import './globals.css';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from '@/styles/GlobalStyle';
+import theme from '@/styles/theme';
+
+import StyledComponentsRegistry from 'src/lib/registry';
 
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
 });
-
-export const metadata: Metadata = {
-  title: 'Meu Portal Rommanel PA',
-  description: 'Meu Portal Rommanel PA',
-};
 
 export default function RootLayout({
   children,
@@ -19,7 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}`}>{children}</body>
+      <body className={`${inter.variable}`}>
+        <StyledComponentsRegistry>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            {children}
+          </ThemeProvider>
+        </StyledComponentsRegistry>
+      </body>
     </html>
   );
 }

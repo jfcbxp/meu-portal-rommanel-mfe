@@ -1,2 +1,2 @@
-yarn format && 
+npx prettier '**/*.{ts,tsx,json}' --write && 
 yarn lint --max-warnings 0
