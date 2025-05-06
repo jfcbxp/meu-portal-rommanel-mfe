@@ -3,9 +3,9 @@
 import React, { lazy, Suspense } from 'react';
 
 // Lazy load das páginas
-const BoletosPage = lazy(() => import('./boletos/page'));
-const DetalhesBoletoPage = lazy(() => import('./detalhesBoleto/page'));
-const LoginPage = lazy(() => import('./login/page'));
+const BoletosPage = lazy(() => import('../app/boletos/page'));
+const DetalhesBoletoPage = lazy(() => import('../app/detalhesBoleto/page'));
+const LoginPage = lazy(() => import('../app/login/page'));
 
 interface DynamicRouterProps {
   page: 'login' | 'boletos' | 'detalhesBoleto';

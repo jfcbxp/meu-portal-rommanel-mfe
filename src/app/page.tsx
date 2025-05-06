@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import DynamicRouter from './DynamicRouter';
+import DynamicRouter from '../routes';
 
 export default function MainApp() {
   const currentPage = 'login';

@@ -2,7 +2,7 @@
 
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'styled-components';
-import GlobalStyle from '@/styles/GlobalStyle';
+import GlobalStyle from '@/styles/global';
 import theme from '@/styles/theme';
 import Provider from '@/contexts/PrimeReactContext';
 import { AuthProvider } from '@/contexts/AuthContext';
