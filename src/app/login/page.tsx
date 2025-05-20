@@ -8,6 +8,7 @@ import Image from 'next/image';
 import logo_grande from '../../../public/logo_grande.png';
 import CPF from '@/components/inputs/cpf';
 import Button from '@/components/buttons/button';
+import useIsMobile from '@/hooks/useIsMobile';
 
 // Styled Components
 const PageContainer = styled.div`
@@ -18,11 +19,6 @@ const PageContainer = styled.div`
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.background};
   padding: ${({ theme }) => theme.spacing.large};
-`;
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  max-width: 400px; // Limit form width on larger screens
 `;
 
 const LogoContainer = styled.div`
@@ -69,9 +65,11 @@ export default function LoginPage() {
     }, 1500);
   };
 
+  const isMobile = useIsMobile();
+
   return (
     <PageContainer>
-      <ContentWrapper>
+      <div style={{ width: isMobile ? '100%' : '400px' }}>
         <LogoContainer>
           <Image alt="logo_grande" src={logo_grande} height={75}></Image>
         </LogoContainer>
@@ -85,7 +83,7 @@ export default function LoginPage() {
             disabled={cpf.replaceAll('_', '').length < 14}
           />
         </Form>
-      </ContentWrapper>
+      </div>
     </PageContainer>
   );
 }

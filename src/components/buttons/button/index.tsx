@@ -36,11 +36,11 @@ const StyledButton = styled(PrimeButton)`
 
 interface Properties extends ButtonProps {
   label: string;
-  loading: boolean;
-  disabled: boolean;
+  loading?: boolean;
+  disabled?: boolean;
 }
 
-export default function Button(properties: Properties) {
+export default function Button(properties: Readonly<Properties>) {
   return (
     <StyledButton
       {...properties}

@@ -7,7 +7,7 @@ import theme from '@/styles/theme';
 import Provider from '@/contexts/PrimeReactContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import StyledComponentsRegistry from 'src/lib/registry';
-import { useState } from 'react';
+import useIsMobile from '@/hooks/useIsMobile';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -19,21 +19,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [mobile, setMobile] = useState(
-    window.matchMedia('(max-width: 768px)').matches,
-  );
-  window.addEventListener('resize', () => {
-    if (window.matchMedia('(max-width: 768px)').matches) {
-      setMobile(true);
-    } else {
-      setMobile(false);
-    }
-  });
+  const isMobile = useIsMobile();
+
   return (
     <html lang="en">
       <body
         className={`${inter.variable}`}
-        style={{ marginInline: !mobile ? '15vw' : undefined }}
+        style={{ marginInline: !isMobile ? '15vw' : undefined }}
       >
         <AuthProvider>
           <Provider>

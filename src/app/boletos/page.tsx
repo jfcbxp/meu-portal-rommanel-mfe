@@ -5,6 +5,67 @@ import styled from 'styled-components';
 import { Button as PrimeButton } from 'primereact/button';
 import { mockBoletos } from '@/utils/mock';
 import Boletos from '@/components/lists/boletos';
+import useIsMobile from '@/hooks/useIsMobile';
+import favicon from '../../../public/favicon.ico';
+import Image from 'next/image';
+import { FaUser, FaBars } from 'react-icons/fa';
+
+export default function BoletosPage() {
+  const [filterActive, setFilterActive] = useState<'30dias' | null>(null);
+  const isMobile = useIsMobile();
+
+  return (
+    <PageContainer>
+      <Header>
+        <Image alt="favicon" src={favicon} />
+        {isMobile ? (
+          <FaBars size={32} color="purple" style={{ cursor: 'pointer' }} />
+        ) : (
+          <MenuUser>
+            <FaUser size={24} color="purple" /> Olá, Usuário
+          </MenuUser>
+        )}
+      </Header>
+
+      <Breadcrumb>Início / Meus boletos</Breadcrumb>
+
+      <InfoContainer>
+        <InfoIcon>
+          <i>i</i>
+        </InfoIcon>
+        <InfoText>
+          Boletos pagos podem demorar até 3 dias para serem atualizados
+        </InfoText>
+      </InfoContainer>
+
+      <ContentWrapper style={{ flexDirection: isMobile ? 'column' : 'row' }}>
+        <FilterContainer>
+          <TitleRow>
+            <Title>Boletos</Title>
+          </TitleRow>
+
+          <FilterButtons>
+            <FilterButton label="Filtrar" icon="pi pi-filter" />
+            <FilterButton
+              label="30 dias"
+              $active={filterActive === '30dias'}
+              onClick={() => setFilterActive('30dias')}
+            />
+            {filterActive && (
+              <ClearButton
+                label="Limpar"
+                icon="pi pi-times"
+                onClick={() => setFilterActive(null)}
+              />
+            )}
+          </FilterButtons>
+        </FilterContainer>
+
+        <Boletos filterActive={filterActive} boletos={mockBoletos} />
+      </ContentWrapper>
+    </PageContainer>
+  );
+}
 
 // Styled Components
 const PageContainer = styled.div`
@@ -14,7 +75,7 @@ const PageContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-const HeaderSim = styled.header`
+const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -28,7 +89,13 @@ const HeaderSim = styled.header`
   }
 `;
 
-const BreadcrumbSim = styled.div`
+const MenuUser = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.small};
+`;
+
+const Breadcrumb = styled.div`
   padding: ${({ theme }) => theme.spacing.small}
     ${({ theme }) => theme.spacing.medium};
   font-size: 0.875rem;
@@ -37,6 +104,7 @@ const BreadcrumbSim = styled.div`
 `;
 
 const ContentWrapper = styled.main`
+  display: flex;
   padding: ${({ theme }) => theme.spacing.large};
   flex-grow: 1;
 `;
@@ -57,9 +125,16 @@ const Title = styled.h1`
 
 const FilterContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  flex: 1;
   gap: ${({ theme }) => theme.spacing.small};
   margin-bottom: ${({ theme }) => theme.spacing.large};
   flex-wrap: wrap; // Allow filters to wrap on smaller screens
+`;
+
+const FilterButtons = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.small};
 `;
 
 // Styled PrimeButton for filters
@@ -101,7 +176,7 @@ const ClearButton = styled(PrimeButton)`
   }
 `;
 
-const AvisoContainer = styled.div`
+const InfoContainer = styled.div`
   display: flex;
   align-items: flex-start; // Align icon and text to the top
   background-color: ${({ theme }) => theme.colors.info};
@@ -109,86 +184,28 @@ const AvisoContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.medium};
   margin-bottom: ${({ theme }) => theme.spacing.large};
   border: 1px solid #bee5eb; // Slightly darker border for info color
+  gap: ${({ theme }) => theme.spacing.small};
 `;
 
-const AvisoIcon = styled.i`
-  color: ${({ theme }) => theme.colors.infoText};
-  font-size: 1.25rem; // Adjust icon size
-  margin-right: ${({ theme }) => theme.spacing.medium};
-  margin-top: 2px; // Align icon slightly better with text
+const InfoIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #bee5eb 0%, #bee5eb 100%);
   flex-shrink: 0;
+  i {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bolder;
+  }
 `;
 
-const AvisoText = styled.p`
+const InfoText = styled.p`
   font-size: 0.875rem; // 14px
   color: ${({ theme }) => theme.colors.infoText};
   line-height: 1.4;
   margin: 0;
 `;
-
-export default function BoletosPage() {
-  const [filterActive, setFilterActive] = useState<'30dias' | null>(null);
-
-  return (
-    <PageContainer>
-      {/* Simulated Header */}
-      <HeaderSim>
-        <PrimeButton
-          icon="pi pi-bars"
-          text
-          rounded
-          severity="secondary"
-          aria-label="Menu"
-        />
-        <span className="font-medium text-lg">Meus Boletos</span>
-        <PrimeButton
-          icon="pi pi-shopping-cart"
-          text
-          rounded
-          severity="secondary"
-          aria-label="Cart"
-        />
-      </HeaderSim>
-
-      <BreadcrumbSim>Início / Meus boletos</BreadcrumbSim>
-
-      <ContentWrapper>
-        <TitleRow>
-          <Title>Boletos</Title>
-          <PrimeButton
-            icon="pi pi-question-circle"
-            text
-            rounded
-            severity="secondary"
-            aria-label="Help"
-          />
-        </TitleRow>
-
-        <FilterContainer>
-          <FilterButton label="Filtrar" icon="pi pi-filter" />
-          <FilterButton
-            label="30 dias"
-            $active={filterActive === '30dias'}
-            onClick={() => setFilterActive('30dias')}
-          />
-          {filterActive && (
-            <ClearButton
-              label="Limpar"
-              icon="pi pi-times"
-              onClick={() => setFilterActive(null)}
-            />
-          )}
-        </FilterContainer>
-
-        <AvisoContainer>
-          <AvisoIcon className="pi pi-info-circle"></AvisoIcon>
-          <AvisoText>
-            Boletos pagos podem demorar até 3 dias para serem atualizados
-          </AvisoText>
-        </AvisoContainer>
-
-        <Boletos filterActive={filterActive} boletos={mockBoletos} />
-      </ContentWrapper>
-    </PageContainer>
-  );
-}
