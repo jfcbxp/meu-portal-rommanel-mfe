@@ -1,20 +1,21 @@
 import React from 'react';
 import favicon from '../../../../../public/favicon.ico';
 import styled from 'styled-components';
-import { Boleto, BoletoItem } from '@/types/index';
+import { Order, OrderItem } from '@/types/index';
 import Image from 'next/image';
 import useIsMobile from '@/hooks/useIsMobile';
+import toBRL from '@/utils/toBRL';
 
 export interface Properties {
-  boleto: Boleto;
+  order: Order;
 }
 
-export default function BoletoItems(properties: Readonly<Properties>) {
+export default function OrderItems(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
   return (
     <ItemListContainer>
-      <SectionTitle>{`Fornecido por ${properties.boleto.fornecedor}`}</SectionTitle>
-      {properties.boleto.itens.map((item: BoletoItem, index: number) => (
+      <SectionTitle>{`Fornecido por ${properties.order.branchDescription}`}</SectionTitle>
+      {properties.order.items.map((item: OrderItem, index: number) => (
         <React.Fragment key={item.id}>
           <ItemContainer>
             <Image
@@ -26,17 +27,16 @@ export default function BoletoItems(properties: Readonly<Properties>) {
             <ItemInfo>
               <div>
                 <p>{item.id}</p>
-                <p>{item.descricao}</p>
+                <p>{item.description}</p>
               </div>
               <div>
-                <p>{`${item.quantidade} item${
-                  item.quantidade > 1 ? 's' : ''
-                }`}</p>
-                <p>{`R$ ${item.valor}`}</p>
+                <p>{`${item.quantity} item${item.quantity > 1 ? 's' : ''}`}</p>
+                <p>{`${toBRL(item.price)}`}</p>
+                <p>{`${toBRL(item.total)}`}</p>
               </div>
             </ItemInfo>
           </ItemContainer>
-          {index < properties.boleto.itens.length - 1 && (
+          {index < properties.order.items.length - 1 && (
             <StyledDivider style={{ margin: '1rem 0' }} />
           )}
         </React.Fragment>

@@ -6,9 +6,50 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
 import logo_grande from '../../../public/logo_grande.png';
-import CPF from '@/components/inputs/cpf';
+import Cpf from '@/components/inputs/cpf';
 import Button from '@/components/buttons/button';
 import useIsMobile from '@/hooks/useIsMobile';
+
+export default function LoginPage() {
+  const [cpf, setCpf] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { setToken } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    // Simula autenticação
+    setTimeout(() => {
+      setToken('fake-token'); // Define o token no contexto
+      setIsLoading(false);
+      router.push('/orders'); // Redireciona para a página de orders
+    }, 1500);
+  };
+
+  const isMobile = useIsMobile();
+
+  return (
+    <PageContainer>
+      <div style={{ width: isMobile ? '100%' : '400px' }}>
+        <LogoContainer>
+          <Image alt="logo_grande" src={logo_grande} height={75}></Image>
+        </LogoContainer>
+        <Title>Portal do Revendedor Rommanel-PA</Title>
+
+        <Form onSubmit={handleSubmit}>
+          <Cpf value={cpf} onChange={e => setCpf(e.value)} />
+          <Button
+            label="Entrar"
+            loading={isLoading}
+            disabled={cpf.replaceAll('_', '').length < 14}
+          />
+        </Form>
+      </div>
+    </PageContainer>
+  );
+}
 
 // Styled Components
 const PageContainer = styled.div`
@@ -46,44 +87,3 @@ const Form = styled.form`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
 `;
-
-export default function LoginPage() {
-  const [cpf, setCpf] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { setToken } = useAuth();
-  const router = useRouter();
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    setIsLoading(true);
-
-    // Simula autenticação
-    setTimeout(() => {
-      setToken('fake-token'); // Define o token no contexto
-      setIsLoading(false);
-      router.push('/boletos'); // Redireciona para a página de boletos
-    }, 1500);
-  };
-
-  const isMobile = useIsMobile();
-
-  return (
-    <PageContainer>
-      <div style={{ width: isMobile ? '100%' : '400px' }}>
-        <LogoContainer>
-          <Image alt="logo_grande" src={logo_grande} height={75}></Image>
-        </LogoContainer>
-        <Title>Portal do Revendedor Rommanel-PA</Title>
-
-        <Form onSubmit={handleSubmit}>
-          <CPF value={cpf} onChange={e => setCpf(e.value)} />
-          <Button
-            label="Entrar"
-            loading={isLoading}
-            disabled={cpf.replaceAll('_', '').length < 14}
-          />
-        </Form>
-      </div>
-    </PageContainer>
-  );
-}

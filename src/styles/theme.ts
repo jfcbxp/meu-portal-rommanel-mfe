@@ -7,8 +7,8 @@ const theme = {
     textLight: '#666666', // Texto secundário cinza
     textWhite: '#FFFFFF', // Texto branco
     success: '#27AE60', // Verde para status "Pago"
-    info: '#E0F2FE', // Azul claro para o aviso
-    infoText: '#0C5460', // Texto do aviso
+    info: '#E0F2FE', // Azul claro para o warning
+    infoText: '#0C5460', // Texto do warning
     inputBorder: '#BDBDBD', // Borda do input
     placeholder: '#BDBDBD', // Cor do placeholder
     logoText: '#4F4F4F', // Cor do texto do logo Rommanel

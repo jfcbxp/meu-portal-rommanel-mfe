@@ -3,29 +3,38 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button as PrimeButton } from 'primereact/button';
-import { mockBoletos } from '@/utils/mock';
-import Boletos from '@/components/lists/boletos';
+import { mockOrders, mockPaymentTypes, mockPeriods } from '@/utils/mock';
+import Orders from '@/components/lists/orders';
 import useIsMobile from '@/hooks/useIsMobile';
-import favicon from '../../../public/favicon.ico';
-import Image from 'next/image';
-import { FaUser, FaBars } from 'react-icons/fa';
+import Header from '@/components/header';
+import OrdersFilter from '@/components/filters/orders';
+import { PaymentTypes } from '@/types/index';
 
-export default function BoletosPage() {
-  const [filterActive, setFilterActive] = useState<'30dias' | null>(null);
+export default function OrdersPage() {
+  const paymentTypes = mockPaymentTypes;
+  const periods = mockPeriods;
+  const [paymentTypeActive, setPaymentTypeActive] = useState<PaymentTypes>(
+    paymentTypes[0],
+  );
+  const [periodActive, setPeriodActive] = useState<PaymentTypes>(periods[0]);
   const isMobile = useIsMobile();
+  const [visible, setVisible] = useState(false);
+
+  if (visible) {
+    return (
+      <OrdersFilter
+        paymentTypeActive={paymentTypeActive}
+        setPaymentTypeActive={setPaymentTypeActive}
+        periodActive={periodActive}
+        setPeriodActive={setPeriodActive}
+        setVisible={setVisible}
+      ></OrdersFilter>
+    );
+  }
 
   return (
     <PageContainer>
-      <Header>
-        <Image alt="favicon" src={favicon} />
-        {isMobile ? (
-          <FaBars size={32} color="purple" style={{ cursor: 'pointer' }} />
-        ) : (
-          <MenuUser>
-            <FaUser size={24} color="purple" /> Olá, Usuário
-          </MenuUser>
-        )}
-      </Header>
+      <Header></Header>
 
       <Breadcrumb>Início / Meus boletos</Breadcrumb>
 
@@ -41,27 +50,33 @@ export default function BoletosPage() {
       <ContentWrapper style={{ flexDirection: isMobile ? 'column' : 'row' }}>
         <FilterContainer>
           <TitleRow>
-            <Title>Boletos</Title>
+            <Title>Filtros</Title>
           </TitleRow>
 
-          <FilterButtons>
-            <FilterButton label="Filtrar" icon="pi pi-filter" />
-            <FilterButton
-              label="30 dias"
-              $active={filterActive === '30dias'}
-              onClick={() => setFilterActive('30dias')}
-            />
-            {filterActive && (
-              <ClearButton
-                label="Limpar"
-                icon="pi pi-times"
-                onClick={() => setFilterActive(null)}
+          {isMobile ? (
+            <FilterButtons>
+              <FilterButton
+                label="Filtrar"
+                icon="pi pi-filter"
+                onClick={() => setVisible(true)}
               />
-            )}
-          </FilterButtons>
+            </FilterButtons>
+          ) : (
+            <OrdersFilter
+              paymentTypeActive={paymentTypeActive}
+              setPaymentTypeActive={setPaymentTypeActive}
+              periodActive={periodActive}
+              setPeriodActive={setPeriodActive}
+              setVisible={setVisible}
+            ></OrdersFilter>
+          )}
         </FilterContainer>
 
-        <Boletos filterActive={filterActive} boletos={mockBoletos} />
+        <Orders
+          paymentTypeActive={paymentTypeActive}
+          periodActive={periodActive}
+          orders={mockOrders}
+        />
       </ContentWrapper>
     </PageContainer>
   );
@@ -73,26 +88,6 @@ const PageContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.background};
-`;
-
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${({ theme }) => theme.spacing.medium};
-  background-color: ${({ theme }) => theme.colors.headerBackground};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
-  width: 100%;
-
-  .p-button {
-    color: ${({ theme }) => theme.colors.iconColor};
-  }
-`;
-
-const MenuUser = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.small};
 `;
 
 const Breadcrumb = styled.div`
@@ -129,11 +124,11 @@ const FilterContainer = styled.div`
   flex: 1;
   gap: ${({ theme }) => theme.spacing.small};
   margin-bottom: ${({ theme }) => theme.spacing.large};
-  flex-wrap: wrap; // Allow filters to wrap on smaller screens
 `;
 
 const FilterButtons = styled.div`
   display: flex;
+  flex-wrap: wrap; // Allow buttons to wrap on smaller screens
   gap: ${({ theme }) => theme.spacing.small};
 `;
 
@@ -157,22 +152,6 @@ const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
 
   &:hover:not(:disabled) {
     background-color: ${({ theme }) => theme.colors.secondary};
-  }
-`;
-
-const ClearButton = styled(PrimeButton)`
-  background-color: transparent;
-  color: ${({ theme }) => theme.colors.textLight};
-  border: none;
-  padding: ${({ theme }) => theme.spacing.small}
-    ${({ theme }) => theme.spacing.small};
-  font-size: 0.875rem;
-  height: auto;
-  min-width: auto;
-
-  .p-button-icon {
-    font-size: 0.75rem; // Smaller icon
-    margin-right: 4px;
   }
 `;
 

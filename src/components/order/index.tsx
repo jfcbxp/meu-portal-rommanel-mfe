@@ -1,7 +1,7 @@
-import { Boleto } from '@/types/index';
+import { Order } from '@/types/index';
 import styled from 'styled-components';
 import StatusChip from '../labels/status-chip';
-import BoletoItems from '../lists/boletos/items';
+import OrderItems from '../lists/orders/items';
 import Button from '../buttons/button';
 import {
   FaBarcode,
@@ -12,17 +12,19 @@ import {
 } from 'react-icons/fa';
 import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
+import toBRL from '@/utils/toBRL';
 
 interface Properties {
-  boleto: Boleto;
+  order: Order;
 }
 
-export default function OrderItem({ boleto }: Readonly<Properties>) {
+export default function OrderContent({ order }: Readonly<Properties>) {
   const toast = useRef<Toast>(null);
+
   const handleCopy = () => {
-    if (boleto?.codigoBarras) {
+    if (order?.barcode) {
       navigator.clipboard
-        .writeText(boleto.codigoBarras)
+        .writeText(order.barcode)
         .then(() => {
           toast.current?.show({
             severity: 'success',
@@ -42,36 +44,40 @@ export default function OrderItem({ boleto }: Readonly<Properties>) {
         });
     }
   };
+
+  let totalItems = order.items.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.quantity,
+    0,
+  );
+
   return (
     <ContentWrapper>
-      <BoletoInfoContainer>
-        <BoletoNumber>{`Boleto nº ${boleto.id}`}</BoletoNumber>
-        <BoletoValue>{`R$ ${boleto.valor}`}</BoletoValue>
+      <OrderInfoContainer>
+        <OrderNumber>{`Boleto nº ${order.document}`}</OrderNumber>
+        <OrderValue>{`${toBRL(order.amount)}`}</OrderValue>
         <DetailsRow>
           <DetailItem>
             <p>Quantidade</p>
-            <p>{`${boleto.itens.length} item${
-              boleto.itens.length > 1 ? 's' : ''
-            }`}</p>
+            <p>{`${totalItems} item${totalItems > 1 ? 's' : ''}`}</p>
           </DetailItem>
           <DetailItemRight>
             <p>Status</p>
-            <StatusChip status={boleto.status} />
+            <StatusChip status={order.status} />
           </DetailItemRight>
         </DetailsRow>
         <StyledDivider />
-      </BoletoInfoContainer>
+      </OrderInfoContainer>
 
-      <BoletoItems boleto={boleto} />
+      <OrderItems order={order} />
 
       <PaymentMethodContainer>
         <SectionTitle>Forma de pagamento</SectionTitle>
         <PaymentMethodRow>
           {(() => {
-            switch (boleto.formaPagamento) {
-              case 'Boleto':
+            switch (order.type) {
+              case 'BOL':
                 return <FaBarcode size={24} />;
-              case 'Cartão de Crédito':
+              case 'CreditCard':
                 return <FaRegCreditCard size={24} />;
               case 'Pix':
                 return <FaQrcode size={24} />;
@@ -79,13 +85,14 @@ export default function OrderItem({ boleto }: Readonly<Properties>) {
                 return <FaMoneyBill size={24} />;
             }
           })()}
-          <span>{boleto.formaPagamento}</span>
+          <span>{order.type}</span>
         </PaymentMethodRow>
       </PaymentMethodContainer>
 
       <Button
         icon={<FaClipboard size={24} style={{ marginRight: '0.5rem' }} />}
         label="Copiar Código de Barras"
+        disabled={!order.barcode}
         onClick={handleCopy}
       />
     </ContentWrapper>
@@ -98,17 +105,17 @@ const ContentWrapper = styled.main`
   padding: ${({ theme }) => theme.spacing.large};
 `;
 
-const BoletoInfoContainer = styled.div`
+const OrderInfoContainer = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.large};
 `;
 
-const BoletoNumber = styled.p`
+const OrderNumber = styled.p`
   font-size: 0.875rem; // 14px
   color: ${({ theme }) => theme.colors.textLight};
   margin: 0 0 ${({ theme }) => theme.spacing.small};
 `;
 
-const BoletoValue = styled.p`
+const OrderValue = styled.p`
   font-size: 1.5rem; // 24px
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};

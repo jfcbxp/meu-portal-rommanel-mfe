@@ -1,60 +1,86 @@
 import StatusChip from '@/components/labels/status-chip';
-import OrderItem from '@/components/orderItem';
+import OrderContent from '@/components/order';
+import OrderDetails from '@/components/order/details';
 import useIsMobile from '@/hooks/useIsMobile';
-import { Boleto } from '@/types/index';
-import React from 'react';
+import { Order } from '@/types/index';
+import toBRL from '@/utils/toBRL';
+import React, { useState } from 'react';
 import { FaChevronRight, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import styled from 'styled-components';
 
 interface Properties {
-  boleto: Boleto;
-  orderId: string;
-  setOrderId: (orderId: string) => void;
-  goToDetails: (id: string) => void;
+  order: Order;
+  orderId: number;
+  setOrderId: (orderId: number) => void;
 }
 
-export default function BoletoItem(properties: Readonly<Properties>) {
+export default function OrderItem(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
-  const isOpen = properties.orderId === properties.boleto.id;
+  const isOpen = properties.orderId === properties.order.id;
+  const [visible, setVisible] = useState(false);
 
-  const handleCardClick = (id: string) => {
+  const handleCardClick = (id: number) => {
     if (isMobile) {
-      properties.goToDetails(id);
-    } else if (isOpen) {
-      properties.setOrderId(undefined);
+      setVisible(true);
     } else {
-      properties.setOrderId(id);
+      setVisible(false);
+      if (isOpen) {
+        properties.setOrderId(undefined);
+      } else {
+        properties.setOrderId(id);
+      }
     }
   };
 
   let ChevronIcon;
   if (isMobile) {
-    ChevronIcon = <FaChevronRight />;
+    ChevronIcon = (
+      <FaChevronRight
+        onClick={() => handleCardClick(properties.order.id)}
+        style={{ cursor: 'pointer' }}
+      />
+    );
   } else if (isOpen) {
-    ChevronIcon = <FaChevronUp />;
+    ChevronIcon = (
+      <FaChevronUp
+        onClick={() => handleCardClick(properties.order.id)}
+        style={{ cursor: 'pointer' }}
+      />
+    );
   } else {
-    ChevronIcon = <FaChevronDown />;
+    ChevronIcon = (
+      <FaChevronDown
+        onClick={() => handleCardClick(properties.order.id)}
+        style={{ cursor: 'pointer' }}
+      />
+    );
   }
 
+  if (visible) {
+    return <OrderDetails setVisible={setVisible} order={properties.order} />;
+  }
+
+  let totalItems = properties.order.items.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.quantity,
+    0,
+  );
+
   return (
-    <CardWrapper
-      key={properties.boleto.id}
-      onClick={() => handleCardClick(properties.boleto.id)}
-    >
+    <CardWrapper key={properties.order.id}>
       <CardHeader>
-        <CardSubtitle>{`nº ${properties.boleto.id}`}</CardSubtitle>
-        <StatusChip status={properties.boleto.status} />
+        <CardSubtitle>{`nº ${properties.order.document}`}</CardSubtitle>
+        <StatusChip status={properties.order.status} />
       </CardHeader>
       <CardBody>
         <CardIconWrapper>
-          <i>{properties.boleto.compra[0]}</i>
+          <i>{properties.order.product[0]}</i>
         </CardIconWrapper>
         <CardInfoWrapper>
-          <CardTitle>{properties.boleto.compra}</CardTitle>
+          <CardTitle>{properties.order.product}</CardTitle>
           <CardValueWrapper>
-            <CardAmount>{`R$ ${properties.boleto.valor}`}</CardAmount>
-            <CardItemCount>{`${properties.boleto.quantidadeItens} item${
-              properties.boleto.quantidadeItens > 1 ? 's' : ''
+            <CardAmount>{`${toBRL(properties.order.amount)}`}</CardAmount>
+            <CardItemCount>{`${totalItems} item${
+              totalItems > 1 ? 's' : ''
             }`}</CardItemCount>
           </CardValueWrapper>
         </CardInfoWrapper>
@@ -62,12 +88,13 @@ export default function BoletoItem(properties: Readonly<Properties>) {
       </CardBody>
       {isOpen && (
         <div style={{ width: '100%' }}>
-          <OrderItem boleto={properties.boleto} />
+          <OrderContent order={properties.order} />
         </div>
       )}
     </CardWrapper>
   );
 }
+
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -76,7 +103,6 @@ const CardWrapper = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.medium};
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   border: 1px solid ${({ theme }) => theme.colors.secondary};
-  cursor: pointer;
   transition: box-shadow 0.2s ease-in-out;
 
   &:hover {

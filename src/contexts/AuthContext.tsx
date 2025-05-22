@@ -14,11 +14,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [token, setToken] = useState<string | null>(null);
 
-  return (
-    <AuthContext.Provider value={{ token, setToken }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = React.useMemo(() => ({ token, setToken }), [token, setToken]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
