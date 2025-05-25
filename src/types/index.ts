@@ -1,30 +1,49 @@
-export interface User {
-  id: number;
-  name: string;
-  cpf: string;
-  email: string;
-  token: string;
+import OrderContent from '@/components/order';
+
+export interface Cd {
+  code: string;
+  description: string;
 }
 
 export interface Order {
+  days: Cd[];
+  types: Cd[];
+  status: Cd[];
+  content: OrderContent[];
+  elements: number;
+  totalElements: number;
+  page: number;
+  totalPages: number;
+}
+
+export interface OrderContent {
   id: number;
+  branch: string;
+  branchDescription: string;
   document: string;
   version: string;
   type: string;
-  branch: string;
-  branchDescription: string;
-  status: string;
   barcode: string;
   digcode: string;
   date: string;
+  invoiceDate: string;
+  invoiceWorkingDate: string;
   paymentDate: string;
   amount: number;
   product: string;
+  quantity: number;
   balance: number;
-  items: OrderItem[];
+  status: string;
+  image: string;
+  items?: OrderItem;
 }
 
 export interface OrderItem {
+  content: OrderItemContent[];
+  totalElements: number;
+}
+
+export interface OrderItemContent {
   id: number;
   branch: string;
   document: string;
@@ -36,14 +55,4 @@ export interface OrderItem {
   price: number;
   total: number;
   image?: string;
-}
-
-export interface PaymentTypes {
-  code: string;
-  description: string;
-}
-
-export interface Period {
-  code: string;
-  description: string;
 }

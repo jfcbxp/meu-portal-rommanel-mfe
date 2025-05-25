@@ -8,6 +8,7 @@ import Provider from '@/contexts/PrimeReactContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import StyledComponentsRegistry from 'src/lib/registry';
 import useIsMobile from '@/hooks/useIsMobile';
+import 'primereact/resources/themes/lara-light-purple/theme.css';
 
 const inter = Inter({
   variable: '--font-inter',

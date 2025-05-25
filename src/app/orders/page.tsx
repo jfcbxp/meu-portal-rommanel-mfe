@@ -1,33 +1,110 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Button as PrimeButton } from 'primereact/button';
-import { mockOrders, mockPaymentTypes, mockPeriods } from '@/utils/mock';
 import Orders from '@/components/lists/orders';
 import useIsMobile from '@/hooks/useIsMobile';
 import Header from '@/components/header';
 import OrdersFilter from '@/components/filters/orders';
-import { PaymentTypes } from '@/types/index';
+import { Cd, Order } from '@/types/index';
+import { fetchOrders } from '../services';
+import { useAuth } from '@/contexts/AuthContext';
+import { Paginator } from 'primereact/paginator';
 
 export default function OrdersPage() {
-  const paymentTypes = mockPaymentTypes;
-  const periods = mockPeriods;
-  const [paymentTypeActive, setPaymentTypeActive] = useState<PaymentTypes>(
-    paymentTypes[0],
-  );
-  const [periodActive, setPeriodActive] = useState<PaymentTypes>(periods[0]);
+  const [paymentTypes, setPaymentTypes] = useState<Cd[]>([]);
+  const [status, setStatus] = useState<Cd[]>([]);
+  const [periods, setPeriods] = useState<Cd[]>([]);
+  const [order, setOrder] = useState<Order>(undefined);
+  const [paymentTypeActive, setPaymentTypeActive] = useState<Cd>();
+  const [statusActive, setStatusActive] = useState<Cd>();
+  const [periodActive, setPeriodActive] = useState<Cd>();
   const isMobile = useIsMobile();
   const [visible, setVisible] = useState(false);
+  const { token } = useAuth();
+  const [date, setDate] = React.useState<Date[] | undefined>();
+
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(10);
+  const initialized = useRef(false);
+
+  const fetchData = useCallback(
+    async (
+      token?: string,
+      page?: number,
+      status?: string,
+      type?: string,
+      date?: Date[],
+    ) => {
+      if (token) {
+        const response = await fetchOrders(
+          token,
+          page,
+          status,
+          type,
+          date?.[0]?.toISOString().split('T')[0],
+          date?.[1]?.toISOString().split('T')[0],
+        );
+
+        if (
+          response &&
+          typeof response === 'object' &&
+          Array.isArray(response.content)
+        ) {
+          setOrder(response);
+          // Só inicializa filtros uma vez
+          if (!initialized.current) {
+            setPaymentTypes(response.types);
+            setStatus(response.status);
+            setPeriods(response.days);
+            initialized.current = true;
+          }
+        } else if (typeof response === 'string') {
+          alert(response);
+        }
+      }
+    },
+    [],
+  );
+
+  const onPageChange = async event => {
+    setFirst(event.first);
+    setRows(event.rows);
+    await fetchData(
+      token,
+      Math.floor(event.first / event.rows) + 1,
+      statusActive?.code,
+      paymentTypeActive?.code,
+      date,
+    );
+  };
+
+  useEffect(() => {
+    fetchData(
+      token,
+      Math.floor(first / rows) + 1,
+      statusActive?.code,
+      paymentTypeActive?.code,
+      date,
+    );
+  }, [token, date, statusActive, paymentTypeActive, fetchData, first, rows]);
 
   if (visible) {
     return (
       <OrdersFilter
+        status={status}
+        statusActive={statusActive}
+        setStatusActive={setStatusActive}
+        periods={periods}
+        paymentTypes={paymentTypes}
         paymentTypeActive={paymentTypeActive}
         setPaymentTypeActive={setPaymentTypeActive}
         periodActive={periodActive}
         setPeriodActive={setPeriodActive}
         setVisible={setVisible}
+        date={date}
+        setDate={setDate}
       ></OrdersFilter>
     );
   }
@@ -63,20 +140,45 @@ export default function OrdersPage() {
             </FilterButtons>
           ) : (
             <OrdersFilter
+              status={status}
+              statusActive={statusActive}
+              setStatusActive={setStatusActive}
+              periods={periods}
+              paymentTypes={paymentTypes}
               paymentTypeActive={paymentTypeActive}
               setPaymentTypeActive={setPaymentTypeActive}
               periodActive={periodActive}
               setPeriodActive={setPeriodActive}
               setVisible={setVisible}
-            ></OrdersFilter>
+              date={date}
+              setDate={setDate}
+            />
           )}
         </FilterContainer>
-
-        <Orders
-          paymentTypeActive={paymentTypeActive}
-          periodActive={periodActive}
-          orders={mockOrders}
-        />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: isMobile ? 1 : 2,
+          }}
+        >
+          {token && order && (
+            <StyledPaginator
+              first={first}
+              rows={rows}
+              totalRecords={order.totalElements}
+              rowsPerPageOptions={[10, 20, 30]}
+              onPageChange={onPageChange}
+            />
+          )}
+          {order && (
+            <Orders
+              paymentTypeActive={paymentTypeActive}
+              periodActive={periodActive}
+              orders={order.content}
+            />
+          )}
+        </div>
       </ContentWrapper>
     </PageContainer>
   );
@@ -187,4 +289,11 @@ const InfoText = styled.p`
   color: ${({ theme }) => theme.colors.infoText};
   line-height: 1.4;
   margin: 0;
+`;
+
+const StyledPaginator = styled(Paginator)`
+  .p-highlight {
+    color: white !important;
+    background: #a259d9 !important;
+  }
 `;

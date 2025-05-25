@@ -5,29 +5,40 @@ import { Button as PrimeButton } from 'primereact/button';
 import Button from '@/components/buttons/button';
 import useIsMobile from '@/hooks/useIsMobile';
 import React from 'react';
-import { PaymentTypes } from '@/types/index';
-import { mockPaymentTypes, mockPeriods } from '@/utils/mock';
+import { Cd } from '@/types/index';
 import DateInput from '@/components/inputs/date';
 
 interface OrdersFilterProps {
+  periods?: Cd[];
+  paymentTypes?: Cd[];
+  status?: Cd[];
   setVisible: (visible: boolean) => void;
-  paymentTypeActive: PaymentTypes;
-  setPaymentTypeActive: (paymentType: PaymentTypes) => void;
-  periodActive: PaymentTypes;
-  setPeriodActive: (period: PaymentTypes) => void;
+  paymentTypeActive?: Cd;
+  setPaymentTypeActive: (paymentType: Cd) => void;
+  statusActive?: Cd;
+  setStatusActive: (status: Cd) => void;
+  periodActive?: Cd;
+  setPeriodActive: (period: Cd) => void;
+  date?: Date[];
+  setDate?: (date: Date[]) => void;
 }
 
 export default function OrdersFilter({
+  periods,
+  paymentTypes,
+  status,
   setVisible,
   paymentTypeActive,
   setPaymentTypeActive,
+  statusActive,
+  setStatusActive,
   periodActive,
   setPeriodActive,
+  date,
+  setDate,
 }: Readonly<OrdersFilterProps>) {
-  const paymentTypes = mockPaymentTypes;
-  const periods = mockPeriods;
   const isMobile = useIsMobile();
-  const [date, setDate] = React.useState<Date | undefined>();
+
   if (isMobile) {
     return (
       <FullScreenModal>
@@ -40,7 +51,26 @@ export default function OrdersFilter({
                 key={paymentType.code}
                 label={paymentType.description}
                 $active={paymentTypeActive === paymentType}
-                onClick={() => setPaymentTypeActive(paymentType)}
+                onClick={() =>
+                  paymentTypeActive?.code === paymentType.code
+                    ? setPaymentTypeActive(undefined)
+                    : setPaymentTypeActive(paymentType)
+                }
+              />
+            ))}
+          </FilterButtons>
+          <h3>Situação</h3>
+          <FilterButtons>
+            {status?.map(item => (
+              <FilterButton
+                key={item.code}
+                label={item.description}
+                $active={statusActive === item}
+                onClick={() =>
+                  statusActive?.code === item.code
+                    ? setStatusActive(undefined)
+                    : setStatusActive(item)
+                }
               />
             ))}
           </FilterButtons>
@@ -55,6 +85,12 @@ export default function OrdersFilter({
               />
             ))}
           </FilterButtons>
+
+          <DateInput
+            value={date ?? []}
+            onChange={e => setDate(e.value)}
+            onFocus={() => setDate(undefined)}
+          />
           <FilterEndButtons>
             <ClearButton
               label="Limpar"
@@ -73,20 +109,6 @@ export default function OrdersFilter({
   } else {
     return (
       <ContentWrapper>
-        {(paymentTypeActive || periodActive) && (
-          <FilterButtons>
-            <ClearButton
-              label="Limpar"
-              icon="pi pi-times"
-              onClick={() => {
-                setPaymentTypeActive(paymentTypes[0]);
-                setPeriodActive(periods[0]);
-                setVisible(false);
-              }}
-            />
-          </FilterButtons>
-        )}
-
         <h3>Tipo</h3>
         <FilterButtons>
           {paymentTypes?.map(paymentType => (
@@ -94,7 +116,26 @@ export default function OrdersFilter({
               key={paymentType.code}
               label={paymentType.description}
               $active={paymentTypeActive === paymentType}
-              onClick={() => setPaymentTypeActive(paymentType)}
+              onClick={() =>
+                paymentTypeActive?.code === paymentType.code
+                  ? setPaymentTypeActive(undefined)
+                  : setPaymentTypeActive(paymentType)
+              }
+            />
+          ))}
+        </FilterButtons>
+        <h3>Situação</h3>
+        <FilterButtons>
+          {status?.map(item => (
+            <FilterButton
+              key={item.code}
+              label={item.description}
+              $active={statusActive === item}
+              onClick={() =>
+                statusActive?.code === item.code
+                  ? setStatusActive(undefined)
+                  : setStatusActive(item)
+              }
             />
           ))}
         </FilterButtons>
@@ -110,8 +151,8 @@ export default function OrdersFilter({
           ))}
         </FilterButtons>
         <DateInput
-          value={date ? [date] : []}
-          onChange={e => setDate(e.value[0])}
+          value={date ?? []}
+          onChange={e => setDate(e.value)}
           onFocus={() => setDate(undefined)}
         />
       </ContentWrapper>

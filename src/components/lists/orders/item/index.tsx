@@ -1,25 +1,50 @@
 import StatusChip from '@/components/labels/status-chip';
-import OrderContent from '@/components/order';
+import OrderContentComponent from '@/components/order';
 import OrderDetails from '@/components/order/details';
+import { useAuth } from '@/contexts/AuthContext';
 import useIsMobile from '@/hooks/useIsMobile';
-import { Order } from '@/types/index';
+import { OrderContent } from '@/types/index';
 import toBRL from '@/utils/toBRL';
+import { Image } from 'primereact/image';
 import React, { useState } from 'react';
-import { FaChevronRight, FaChevronUp, FaChevronDown } from 'react-icons/fa';
+import {
+  FaChevronRight,
+  FaChevronUp,
+  FaChevronDown,
+  FaBarcode,
+} from 'react-icons/fa';
+import { fetchOrderItems } from 'src/app/services';
 import styled from 'styled-components';
 
 interface Properties {
-  order: Order;
+  order: OrderContent;
   orderId: number;
   setOrderId: (orderId: number) => void;
 }
 
-export default function OrderItem(properties: Readonly<Properties>) {
+export default function OrderItemComponent(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
   const isOpen = properties.orderId === properties.order.id;
   const [visible, setVisible] = useState(false);
+  const { token } = useAuth();
 
   const handleCardClick = (id: number) => {
+    if (properties.order.quantity > 0) {
+      fetchOrderItems(
+        token,
+        properties.order.branch,
+        properties.order.document,
+        properties.order.version,
+      ).then(response => {
+        if (
+          response &&
+          typeof response === 'object' &&
+          Array.isArray(response)
+        ) {
+          properties.order.items = response;
+        }
+      });
+    }
     if (isMobile) {
       setVisible(true);
     } else {
@@ -60,11 +85,6 @@ export default function OrderItem(properties: Readonly<Properties>) {
     return <OrderDetails setVisible={setVisible} order={properties.order} />;
   }
 
-  let totalItems = properties.order.items.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.quantity,
-    0,
-  );
-
   return (
     <CardWrapper key={properties.order.id}>
       <CardHeader>
@@ -73,22 +93,31 @@ export default function OrderItem(properties: Readonly<Properties>) {
       </CardHeader>
       <CardBody>
         <CardIconWrapper>
-          <i>{properties.order.product[0]}</i>
+          {properties.order.image ? (
+            <Image alt="image" src={properties.order.image} />
+          ) : (
+            <FaBarcode color="white" />
+          )}
         </CardIconWrapper>
         <CardInfoWrapper>
           <CardTitle>{properties.order.product}</CardTitle>
           <CardValueWrapper>
             <CardAmount>{`${toBRL(properties.order.amount)}`}</CardAmount>
-            <CardItemCount>{`${totalItems} item${
-              totalItems > 1 ? 's' : ''
-            }`}</CardItemCount>
+            <CardItemCount>
+              {properties.order.quantity == 0
+                ? `Em negociação`
+                : (() => {
+                    const plural = properties.order.quantity > 1 ? 's' : '';
+                    return `${properties.order.quantity} item${plural}`;
+                  })()}
+            </CardItemCount>
           </CardValueWrapper>
         </CardInfoWrapper>
         {ChevronIcon}
       </CardBody>
       {isOpen && (
         <div style={{ width: '100%' }}>
-          <OrderContent order={properties.order} />
+          <OrderContentComponent order={properties.order} />
         </div>
       )}
     </CardWrapper>

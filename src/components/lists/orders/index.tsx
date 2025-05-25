@@ -1,17 +1,17 @@
 'use client';
 
-import { Order, PaymentTypes, Period } from '@/types/index';
+import { Cd, OrderContent } from '@/types/index';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import styled from 'styled-components';
-import useIsMobile from '@/hooks/useIsMobile';
-import OrderItem from './item';
+import OrderItemComponent from './item';
+import theme from '@/styles/theme';
 
 interface Properties {
-  paymentTypeActive: PaymentTypes;
-  periodActive: Period;
-  orders?: Order[];
+  paymentTypeActive: Cd;
+  periodActive: Cd;
+  orders?: OrderContent[];
 }
 
 // Helper function to format date
@@ -25,7 +25,10 @@ const formatDate = (dateString: string): string => {
 };
 
 // Helper function to group orders by date
-const groupOrdersByDate = (orders: Order[]) => {
+const groupOrdersByDate = (orders: OrderContent[]) => {
+  if (!orders || orders.length === 0) {
+    return {};
+  }
   return orders.reduce((acc, order) => {
     const formattedDate = order.date;
     if (!acc[formattedDate]) {
@@ -33,13 +36,12 @@ const groupOrdersByDate = (orders: Order[]) => {
     }
     acc[formattedDate].push(order);
     return acc;
-  }, {} as Record<string, Order[]>);
+  }, {} as Record<string, OrderContent[]>);
 };
 
 export default function Orders(properties: Readonly<Properties>) {
   const router = useRouter();
   const { token } = useAuth();
-  const isMobile = useIsMobile();
   const [orderId, setOrderId] = useState<number>();
 
   useEffect(() => {
@@ -50,22 +52,21 @@ export default function Orders(properties: Readonly<Properties>) {
 
   // Always call hooks before any return
   const filteredOrders = useMemo(() => {
-    const periodDays = parseInt(properties.periodActive.code, 10);
-    const daysAgo = new Date();
-    daysAgo.setDate(daysAgo.getDate() - (isNaN(periodDays) ? 0 : periodDays));
+    if (properties.orders && properties.periodActive) {
+      console.log('Filtered orders');
+      const periodDays = parseInt(properties.periodActive.code, 10);
+      const daysAgo = new Date();
+      daysAgo.setDate(daysAgo.getDate() - (isNaN(periodDays) ? 0 : periodDays));
 
-    return properties.orders.filter(order => {
-      const [day, month, year] = order.date.split('/').map(Number);
-      const orderDate = new Date(year, month - 1, day);
-      return (
-        orderDate >= daysAgo && order.type === properties.paymentTypeActive.code
-      );
-    });
-  }, [
-    properties.periodActive.code,
-    properties.orders,
-    properties.paymentTypeActive.code,
-  ]);
+      return properties.orders.filter(order => {
+        const [day, month, year] = order.date.split('/').map(Number);
+        const orderDate = new Date(year, month - 1, day);
+        return orderDate >= daysAgo;
+      });
+    }
+
+    return properties.orders;
+  }, [properties.orders, properties.periodActive]);
 
   const groupedOrders = useMemo(
     () => groupOrdersByDate(filteredOrders),
@@ -75,6 +76,7 @@ export default function Orders(properties: Readonly<Properties>) {
   const sortedDates = useMemo(
     () =>
       Object.keys(groupedOrders).sort((a, b) => {
+        console.log('Sorted dates');
         const dateA = new Date(
           parseInt(a.split(' de ')[2], 10),
           new Date(Date.parse(a.split(' de ')[1] + ' 1, 2000')).getMonth(),
@@ -95,30 +97,32 @@ export default function Orders(properties: Readonly<Properties>) {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: isMobile ? 1 : 2,
-      }}
-    >
+    <div style={{ width: '100%' }}>
       {sortedDates.length === 0 && (
         <p style={{ textAlign: 'center', color: '#666' }}>
-          Nenhum order encontrado.
+          Nenhum boleto encontrado.
         </p>
       )}
 
       {sortedDates.map(date => (
         <div key={date}>
           <DateHeader>{date}</DateHeader>
-          {groupedOrders[date].map(order => (
-            <OrderItem
-              key={order.id}
-              order={order}
-              orderId={orderId}
-              setOrderId={setOrderId}
-            />
-          ))}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: theme.spacing.medium,
+            }}
+          >
+            {groupedOrders[date].map(order => (
+              <OrderItemComponent
+                key={order.id}
+                order={order}
+                orderId={orderId}
+                setOrderId={setOrderId}
+              />
+            ))}
+          </div>
         </div>
       ))}
     </div>

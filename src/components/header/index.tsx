@@ -3,6 +3,9 @@ import { FaBars, FaChevronLeft, FaTimes, FaUser } from 'react-icons/fa';
 import { styled } from 'styled-components';
 import favicon from '../../../public/favicon.ico';
 import Image from 'next/image';
+import { useAuth } from '@/contexts/AuthContext';
+import { jwtDecode } from 'jwt-decode';
+import { useEffect, useState } from 'react';
 
 interface HeaderProps {
   title?: string;
@@ -11,6 +14,15 @@ interface HeaderProps {
 
 export default function Header({ title, onClick }: Readonly<HeaderProps>) {
   const isMobile = useIsMobile();
+  const { token } = useAuth();
+  const [name, setName] = useState<string>('Usuário');
+
+  useEffect(() => {
+    if (token) {
+      setName(jwtDecode(token)['name']);
+    }
+  }, [token]);
+
   if (!title) {
     return (
       <Container>
@@ -19,7 +31,8 @@ export default function Header({ title, onClick }: Readonly<HeaderProps>) {
           <FaBars size={32} color="purple" style={{ cursor: 'pointer' }} />
         ) : (
           <MenuUser>
-            <FaUser size={24} color="purple" /> Olá, Usuário
+            <FaUser size={24} color="purple" />
+            {`Olá, ${name}`}
           </MenuUser>
         )}
       </Container>

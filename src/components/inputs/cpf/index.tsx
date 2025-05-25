@@ -30,7 +30,7 @@ export default function CPF(properties: Readonly<InputMaskProps>) {
         onClick={handleOnClick}
         required
         autoClear={false}
-        unmask={false} // Keep mask
+        unmask={true} // Keep mask
       />
       <HelperTextContainer>
         <span>Campo obrigatório</span>

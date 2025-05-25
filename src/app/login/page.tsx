@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,23 +9,33 @@ import logo_grande from '../../../public/logo_grande.png';
 import Cpf from '@/components/inputs/cpf';
 import Button from '@/components/buttons/button';
 import useIsMobile from '@/hooks/useIsMobile';
+import { fetchLogin } from '../services';
 
 export default function LoginPage() {
-  const [cpf, setCpf] = useState('');
+  const [cpf, setCpf] = useState('69409846234');
   const [isLoading, setIsLoading] = useState(false);
-  const { setToken } = useAuth();
+  const { token, setToken } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!token) {
+      router.push('/login');
+    } else {
+      router.push('/orders');
+    }
+  }, [router, token]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
-
-    // Simula autenticação
-    setTimeout(() => {
-      setToken('fake-token'); // Define o token no contexto
+    fetchLogin(cpf).then(response => {
       setIsLoading(false);
-      router.push('/orders'); // Redireciona para a página de orders
-    }, 1500);
+      if (response && !response.startsWith('Failed to fetch')) {
+        setToken(response);
+      } else {
+        alert(response);
+      }
+    });
   };
 
   const isMobile = useIsMobile();
@@ -43,7 +53,7 @@ export default function LoginPage() {
           <Button
             label="Entrar"
             loading={isLoading}
-            disabled={cpf.replaceAll('_', '').length < 14}
+            disabled={cpf.replaceAll('_', '').length < 11}
           />
         </Form>
       </div>

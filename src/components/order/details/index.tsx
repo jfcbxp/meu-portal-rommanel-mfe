@@ -3,13 +3,13 @@
 import React, { Suspense, useRef } from 'react';
 import styled from 'styled-components';
 import { Toast } from 'primereact/toast';
-import OrderContent from '@/components/order';
-import { Order } from '@/types/index';
+import OrderContentComponent from '@/components/order';
+import { Order, OrderContent } from '@/types/index';
 import FullScreenModal from '@/components/modals/fullscreen';
 import Header from '@/components/header';
 
 interface OrderDetailContentProps {
-  order?: Order;
+  order?: OrderContent;
   setVisible: (visible: boolean) => void;
 }
 
@@ -37,13 +37,13 @@ function OrderDetailContent({
       <Toast ref={toast} />
       <Header title="Detalhe do Boleto" onClick={setVisible} />
 
-      <OrderContent order={order} />
+      <OrderContentComponent order={order} />
     </FullScreenModal>
   );
 }
 
 interface OrderDetailsProps {
-  order?: Order;
+  order?: OrderContent;
   setVisible: (visible: boolean) => void;
 }
 

@@ -1,4 +1,4 @@
-import { Order } from '@/types/index';
+import { OrderContent } from '@/types/index';
 import styled from 'styled-components';
 import StatusChip from '../labels/status-chip';
 import OrderItems from '../lists/orders/items';
@@ -15,10 +15,10 @@ import { Toast } from 'primereact/toast';
 import toBRL from '@/utils/toBRL';
 
 interface Properties {
-  order: Order;
+  order: OrderContent;
 }
 
-export default function OrderContent({ order }: Readonly<Properties>) {
+export default function OrderContentComponent({ order }: Readonly<Properties>) {
   const toast = useRef<Toast>(null);
 
   const handleCopy = () => {
@@ -45,11 +45,6 @@ export default function OrderContent({ order }: Readonly<Properties>) {
     }
   };
 
-  let totalItems = order.items.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.quantity,
-    0,
-  );
-
   return (
     <ContentWrapper>
       <OrderInfoContainer>
@@ -58,7 +53,7 @@ export default function OrderContent({ order }: Readonly<Properties>) {
         <DetailsRow>
           <DetailItem>
             <p>Quantidade</p>
-            <p>{`${totalItems} item${totalItems > 1 ? 's' : ''}`}</p>
+            <p>{`${order.quantity} item${order.quantity > 1 ? 's' : ''}`}</p>
           </DetailItem>
           <DetailItemRight>
             <p>Status</p>
