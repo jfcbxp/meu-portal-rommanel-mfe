@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AvisoWrapper = styled.div`
+export const WarningWrapper = styled.div`
   display: flex;
   align-items: flex-start; // Align icon and text to the top
   background-color: ${({ theme }) => theme.colors.info};

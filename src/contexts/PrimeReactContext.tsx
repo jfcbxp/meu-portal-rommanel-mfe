@@ -8,10 +8,10 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Provider({ children }: LayoutProps) {
+export default function Provider({ children }: Readonly<LayoutProps>) {
   return (
     // Set unstyled to true, remove pt: Tailwind
-    <PrimeReactProvider value={{ unstyled: true }}>
+    <PrimeReactProvider value={{ unstyled: false }}>
       {children}
     </PrimeReactProvider>
   );

@@ -1,11 +1,65 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { InputMask, InputMaskChangeEvent } from 'primereact/inputmask';
-import { Button as PrimeButton } from 'primereact/button';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import Image from 'next/image';
+import logo_grande from '../../../public/logo_grande.png';
+import Cpf from '@/components/inputs/cpf';
+import Button from '@/components/buttons/button';
+import useIsMobile from '@/hooks/useIsMobile';
+import { fetchLogin } from '../services';
+
+export default function LoginPage() {
+  const [cpf, setCpf] = useState('69409846234');
+  const [isLoading, setIsLoading] = useState(false);
+  const { token, setToken } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!token) {
+      router.push('/login');
+    } else {
+      router.push('/orders');
+    }
+  }, [router, token]);
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsLoading(true);
+    fetchLogin(cpf).then(response => {
+      setIsLoading(false);
+      if (response && !response.startsWith('Failed to fetch')) {
+        setToken(response);
+      } else {
+        alert(response);
+      }
+    });
+  };
+
+  const isMobile = useIsMobile();
+
+  return (
+    <PageContainer>
+      <div style={{ width: isMobile ? '100%' : '400px' }}>
+        <LogoContainer>
+          <Image alt="logo_grande" src={logo_grande} height={75}></Image>
+        </LogoContainer>
+        <Title>Portal do Revendedor Rommanel-PA</Title>
+
+        <Form onSubmit={handleSubmit}>
+          <Cpf value={cpf} onChange={e => setCpf(e.value)} />
+          <Button
+            label="Entrar"
+            loading={isLoading}
+            disabled={cpf.replaceAll('_', '').length < 11}
+          />
+        </Form>
+      </div>
+    </PageContainer>
+  );
+}
 
 // Styled Components
 const PageContainer = styled.div`
@@ -16,11 +70,6 @@ const PageContainer = styled.div`
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.background};
   padding: ${({ theme }) => theme.spacing.large};
-`;
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  max-width: 400px; // Limit form width on larger screens
 `;
 
 const LogoContainer = styled.div`
@@ -37,10 +86,10 @@ const LogoContainer = styled.div`
 
 const Title = styled.h1`
   text-align: center;
-  font-size: 1rem;
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.logoText};
   margin-bottom: ${({ theme }) => theme.spacing.xlarge};
-  font-weight: 400; // Match reference image
+  font-weight: bolder; // Match reference image
 `;
 
 const Form = styled.form`
@@ -48,142 +97,3 @@ const Form = styled.form`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
 `;
-
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Label = styled.label`
-  font-size: 0.875rem; // 14px
-  color: ${({ theme }) => theme.colors.textLight};
-  margin-bottom: ${({ theme }) => theme.spacing.small};
-`;
-
-// Style the PrimeReact InputMask using styled()
-const StyledInputMask = styled(InputMask)`
-  padding: ${({ theme }) => theme.spacing.medium};
-  border: 1px solid ${({ theme }) => theme.colors.inputBorder};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-  font-size: 1rem; // 16px
-  color: ${({ theme }) => theme.colors.text};
-  background-color: ${({ theme }) => theme.colors.background};
-  width: 100%;
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 2px rgba(93, 58, 123, 0.2); // Sombra roxa clara no foco
-  }
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.placeholder};
-  }
-`;
-
-const HelperTextContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem; // 12px
-  color: ${({ theme }) => theme.colors.textLight};
-  margin-top: ${({ theme }) => theme.spacing.small};
-`;
-
-// Style the PrimeReact Button using styled()
-const StyledButton = styled(PrimeButton)`
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.textWhite};
-  padding: ${({ theme }) => theme.spacing.medium}
-    ${({ theme }) => theme.spacing.large};
-  border-radius: ${({ theme }) => theme.borderRadius.large};
-  width: 100%;
-  display: flex; // Needed for PrimeButton loading icon alignment
-  justify-content: center;
-  align-items: center;
-  min-height: 50px; // Match reference
-  border: none;
-  transition: background-color 0.2s ease-in-out;
-  font-size: 1rem;
-  font-weight: 500;
-
-  &:hover:not(:disabled) {
-    background-color: #4a2d62; // Darker purple
-  }
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-
-  // Style for loading icon (PrimeReact uses .p-button-loading-icon)
-  .p-button-loading-icon {
-    margin-right: ${({ theme }) => theme.spacing.small};
-    font-size: 1.2rem; // Adjust size if needed
-  }
-`;
-
-export default function LoginPage() {
-  const [cpf, setCpf] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { setToken } = useAuth();
-  const router = useRouter();
-
-  const handleCpfChange = (e: InputMaskChangeEvent) => {
-    setCpf(e.value || '');
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    setIsLoading(true);
-
-    // Simula autenticação
-    setTimeout(() => {
-      setToken('fake-token'); // Define o token no contexto
-      setIsLoading(false);
-      router.push('/boletos'); // Redireciona para a página de boletos
-    }, 1500);
-  };
-
-  const rawCpf = cpf.replace(/\D/g, '');
-  const isCpfComplete = rawCpf.length === 11;
-  const charCount = rawCpf.length;
-
-  return (
-    <PageContainer>
-      <ContentWrapper>
-        <LogoContainer>
-          {/* Replace with actual Rommanel Logo component/SVG if available */}
-          <span>Rommanel</span>
-        </LogoContainer>
-        <Title>Portal do Revendedor Rommanel-PA</Title>
-
-        <Form onSubmit={handleSubmit}>
-          <InputWrapper>
-            <Label htmlFor="cpf">CPF</Label>
-            <StyledInputMask
-              id="cpf"
-              mask="999.999.999-99"
-              placeholder="111.111.111-11"
-              value={cpf}
-              onChange={handleCpfChange}
-              required
-              autoClear={false}
-              unmask={false} // Keep mask
-            />
-            <HelperTextContainer>
-              <span>Campo obrigatório</span>
-              <span>{charCount}/11</span>
-            </HelperTextContainer>
-          </InputWrapper>
-
-          <StyledButton
-            label="Entrar"
-            type="submit"
-            loading={isLoading}
-            disabled={!isCpfComplete || isLoading}
-          />
-        </Form>
-      </ContentWrapper>
-    </PageContainer>
-  );
-}

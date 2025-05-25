@@ -3,13 +3,13 @@
 import React, { ReactNode } from 'react';
 import * as S from './styles';
 
-interface AvisoProps {
+interface WarningProperties {
   children: ReactNode;
 }
 
-const Aviso: React.FC<AvisoProps> = ({ children }) => {
+const Warning: React.FC<WarningProperties> = ({ children }) => {
   return (
-    <S.AvisoWrapper>
+    <S.WarningWrapper>
       <S.IconWrapper>
         {/* Placeholder for info icon */}
         <svg
@@ -25,8 +25,8 @@ const Aviso: React.FC<AvisoProps> = ({ children }) => {
         </svg>
       </S.IconWrapper>
       <S.Text>{children}</S.Text>
-    </S.AvisoWrapper>
+    </S.WarningWrapper>
   );
 };
 
-export default Aviso;
+export default Warning;

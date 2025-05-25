@@ -7,6 +7,8 @@ import theme from '@/styles/theme';
 import Provider from '@/contexts/PrimeReactContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import StyledComponentsRegistry from 'src/lib/registry';
+import useIsMobile from '@/hooks/useIsMobile';
+import 'primereact/resources/themes/lara-light-purple/theme.css';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -18,9 +20,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isMobile = useIsMobile();
+
   return (
     <html lang="en">
-      <body className={`${inter.variable}`}>
+      <body
+        className={`${inter.variable}`}
+        style={{ marginInline: !isMobile ? '15vw' : undefined }}
+      >
         <AuthProvider>
           <Provider>
             <StyledComponentsRegistry>
