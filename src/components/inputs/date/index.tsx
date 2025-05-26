@@ -1,6 +1,6 @@
-import { Calendar, CalendarProps } from 'primereact/calendar';
-import { styled } from 'styled-components';
+import { CalendarProps } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
+import { StyledCalendar } from './styles';
 
 export default function DateInput(
   properties: Readonly<CalendarProps<'multiple', Date[]>>,
@@ -62,27 +62,3 @@ export default function DateInput(
     />
   );
 }
-
-const StyledCalendar = styled(Calendar)`
-  display: inline-block;
-  position: relative;
-
-  & input[type='text'] {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 8px 12px;
-    border: 1px solid ${({ theme }) => theme.colors.inputBorder || '#ccc'};
-    border-radius: ${({ theme }) => theme.borderRadius.medium || '8px'};
-    font-size: 1rem;
-    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    background: ${({ theme }) => theme.colors.background || '#fff'};
-    color: ${({ theme }) => theme.colors.text || '#000'};
-  }
-
-  & input[type='text']:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary || '#888'};
-    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
-  }
-`;

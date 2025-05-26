@@ -1,12 +1,18 @@
 import Header from '@/components/header';
 import FullScreenModal from '@/components/modals/fullscreen';
-import { styled } from 'styled-components';
-import { Button as PrimeButton } from 'primereact/button';
+
 import Button from '@/components/buttons/button';
 import useIsMobile from '@/hooks/useIsMobile';
 import React from 'react';
 import { Cd } from '@/types/index';
 import DateInput from '@/components/inputs/date';
+import {
+  ButtonsContainer,
+  ClearButton,
+  Container,
+  FilterButton,
+  FooterContainer,
+} from './styles';
 
 interface OrdersFilterProps {
   periods?: Cd[];
@@ -43,9 +49,9 @@ export default function OrdersFilter({
     return (
       <FullScreenModal>
         <Header title="Filtrar" onClick={() => setVisible(false)} />
-        <ContentWrapper>
+        <Container>
           <h3>Tipo</h3>
-          <FilterButtons>
+          <ButtonsContainer>
             {paymentTypes?.map(paymentType => (
               <FilterButton
                 key={paymentType.code}
@@ -58,9 +64,9 @@ export default function OrdersFilter({
                 }
               />
             ))}
-          </FilterButtons>
+          </ButtonsContainer>
           <h3>Situação</h3>
-          <FilterButtons>
+          <ButtonsContainer>
             {status?.map(item => (
               <FilterButton
                 key={item.code}
@@ -73,9 +79,9 @@ export default function OrdersFilter({
                 }
               />
             ))}
-          </FilterButtons>
+          </ButtonsContainer>
           <h3>Período</h3>
-          <FilterButtons>
+          <ButtonsContainer>
             {periods?.map(period => (
               <FilterButton
                 key={period.code}
@@ -84,14 +90,14 @@ export default function OrdersFilter({
                 onClick={() => setPeriodActive(period)}
               />
             ))}
-          </FilterButtons>
+          </ButtonsContainer>
 
           <DateInput
             value={date ?? []}
             onChange={e => setDate(e.value)}
             onFocus={() => setDate(undefined)}
           />
-          <FilterEndButtons>
+          <FooterContainer>
             <ClearButton
               label="Limpar"
               icon="pi pi-times"
@@ -102,15 +108,15 @@ export default function OrdersFilter({
               }}
             />
             <Button label="Aplicar" onClick={() => setVisible(false)} />
-          </FilterEndButtons>
-        </ContentWrapper>
+          </FooterContainer>
+        </Container>
       </FullScreenModal>
     );
   } else {
     return (
-      <ContentWrapper>
+      <Container>
         <h3>Tipo</h3>
-        <FilterButtons>
+        <ButtonsContainer>
           {paymentTypes?.map(paymentType => (
             <FilterButton
               key={paymentType.code}
@@ -123,9 +129,9 @@ export default function OrdersFilter({
               }
             />
           ))}
-        </FilterButtons>
+        </ButtonsContainer>
         <h3>Situação</h3>
-        <FilterButtons>
+        <ButtonsContainer>
           {status?.map(item => (
             <FilterButton
               key={item.code}
@@ -138,9 +144,9 @@ export default function OrdersFilter({
               }
             />
           ))}
-        </FilterButtons>
+        </ButtonsContainer>
         <h3>Período</h3>
-        <FilterButtons>
+        <ButtonsContainer>
           {periods?.map(period => (
             <FilterButton
               key={period.code}
@@ -149,75 +155,13 @@ export default function OrdersFilter({
               onClick={() => setPeriodActive(period)}
             />
           ))}
-        </FilterButtons>
+        </ButtonsContainer>
         <DateInput
           value={date ?? []}
           onChange={e => setDate(e.value)}
           onFocus={() => setDate(undefined)}
         />
-      </ContentWrapper>
+      </Container>
     );
   }
 }
-
-const ContentWrapper = styled.main`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.large};
-  flex-direction: column;
-  padding: ${({ theme }) => theme.spacing.large};
-  height: 100%;
-`;
-
-const FilterEndButtons = styled.div`
-  display: flex;
-  width: 100%;
-  gap: ${({ theme }) => theme.spacing.small};
-  bottom: 0;
-  left: 0;
-  position: fixed;
-  padding: ${({ theme }) => theme.spacing.large};
-`;
-
-const FilterButtons = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.small};
-`;
-
-const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
-  background-color: ${({ theme, $active }) =>
-    $active ? theme.colors.secondary : theme.colors.background};
-  color: ${({ theme }) => theme.colors.textLight};
-  border: 1px solid ${({ theme }) => theme.colors.inputBorder};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-  padding: ${({ theme }) => theme.spacing.small}
-    ${({ theme }) => theme.spacing.medium};
-  font-size: 0.875rem;
-  height: auto;
-  min-width: auto;
-
-  .p-button-icon {
-    font-size: 1rem;
-    margin-right: ${({ theme }) => theme.spacing.small};
-  }
-
-  &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.colors.secondary};
-  }
-`;
-
-const ClearButton = styled(PrimeButton)`
-  background-color: transparent;
-  color: ${({ theme }) => theme.colors.textLight};
-  border: none;
-  padding: ${({ theme }) => theme.spacing.small}
-    ${({ theme }) => theme.spacing.small};
-  font-size: 0.875rem;
-  height: auto;
-  min-width: auto;
-
-  .p-button-icon {
-    font-size: 0.75rem;
-    margin-right: 4px;
-  }
-`;

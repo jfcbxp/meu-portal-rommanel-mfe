@@ -31,6 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
     } else {
       sessionStorage.removeItem('token');
+      setToken(null);
     }
   }, [token]);
 

@@ -4,9 +4,10 @@ import { Cd, GroupedOrders } from '@/types/index';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import styled from 'styled-components';
+
 import OrderItemComponent from './item';
 import theme from '@/styles/theme';
+import { DateHeader } from './styles';
 
 interface Properties {
   paymentTypeActive: Cd;
@@ -61,11 +62,3 @@ export default function Orders(properties: Readonly<Properties>) {
     </div>
   );
 }
-
-const DateHeader = styled.h2`
-  font-size: 1rem;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
-  margin-top: ${({ theme }) => theme.spacing.large};
-  margin-bottom: ${({ theme }) => theme.spacing.medium};
-`;

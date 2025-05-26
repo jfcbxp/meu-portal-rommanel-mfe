@@ -1,0 +1,82 @@
+import styled from 'styled-components';
+
+export const Container = styled.main`
+  display: flex;
+  flex-direction: column;
+  padding: ${({ theme }) => theme.spacing.large};
+`;
+
+export const OrderInfoContainer = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.large};
+`;
+
+export const OrderNumber = styled.p`
+  font-size: 0.875rem;
+  color: ${({ theme }) => theme.colors.textLight};
+  margin: 0 0 ${({ theme }) => theme.spacing.small};
+`;
+
+export const OrderValue = styled.p`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0 0 ${({ theme }) => theme.spacing.medium};
+`;
+
+export const DetailsRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const DetailItem = styled.div`
+  p:first-child {
+    font-size: 0.875rem;
+    color: ${({ theme }) => theme.colors.textLight};
+    margin: 0 0 4px;
+  }
+  p:last-child {
+    font-size: 1rem;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.text};
+    margin: 0;
+  }
+`;
+
+export const DetailItemRight = styled(DetailItem)`
+  text-align: right;
+`;
+
+export const SectionTitle = styled.h2`
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.textLight};
+  margin: 0 0 ${({ theme }) => theme.spacing.medium};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
+  padding-bottom: ${({ theme }) => theme.spacing.small};
+`;
+
+export const StyledDivider = styled.div`
+  margin: ${({ theme }) => theme.spacing.large} 0;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
+`;
+
+export const PaymentMethodContainer = styled.div``;
+
+export const PaymentMethodRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.small};
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
+
+  i {
+    color: ${({ theme }) => theme.colors.primary};
+    font-size: 1.25rem;
+  }
+
+  span {
+    font-size: 1rem;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.text};
+  }
+`;

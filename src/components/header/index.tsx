@@ -1,11 +1,12 @@
 import useIsMobile from '@/hooks/useIsMobile';
 import { FaBars, FaChevronLeft, FaTimes, FaUser } from 'react-icons/fa';
-import { styled } from 'styled-components';
+
 import favicon from '../../../public/favicon.ico';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
+import { HeaderContainer, HeaderMenu, HeaderTitle } from './styles';
 
 interface HeaderProps {
   title?: string;
@@ -25,70 +26,44 @@ export default function Header({ title, onClick }: Readonly<HeaderProps>) {
 
   if (!title) {
     return (
-      <Container>
+      <HeaderContainer>
         <Image alt="favicon" src={favicon} />
         {isMobile ? (
           <FaBars size={32} color="purple" style={{ cursor: 'pointer' }} />
         ) : (
-          <MenuUser>
+          <HeaderMenu>
             <FaUser size={24} color="purple" />
             {`Olá, ${name}`}
-          </MenuUser>
+          </HeaderMenu>
         )}
-      </Container>
+      </HeaderContainer>
     );
   }
   if (isMobile) {
     return (
-      <Container>
+      <HeaderContainer>
         <span style={{ width: '2.5rem' }}></span> {/* Spacer */}
-        {title && <Title>{title}</Title>}
+        {title && <HeaderTitle>{title}</HeaderTitle>}
         <FaTimes
           size={24}
           color="purple"
           onClick={() => onClick && onClick(null)}
           style={{ cursor: 'pointer' }}
         />
-      </Container>
+      </HeaderContainer>
     );
   } else {
     return (
-      <Container>
+      <HeaderContainer>
         <FaChevronLeft
           size={24}
           color="purple"
           onClick={() => onClick && onClick(null)}
           style={{ cursor: 'pointer' }}
         />
-        {title && <Title>{title}</Title>}
+        {title && <HeaderTitle>{title}</HeaderTitle>}
         <span style={{ width: '2.5rem' }}></span> {/* Spacer */}
-      </Container>
+      </HeaderContainer>
     );
   }
 }
-
-const Container = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${({ theme }) => theme.spacing.medium};
-  background-color: ${({ theme }) => theme.colors.headerBackground};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
-  width: 100%;
-
-  .p-button {
-    color: ${({ theme }) => theme.colors.iconColor};
-  }
-`;
-
-const Title = styled.span`
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.text};
-`;
-
-const MenuUser = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.small};
-`;
