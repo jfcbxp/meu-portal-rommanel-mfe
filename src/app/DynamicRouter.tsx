@@ -1,5 +1,3 @@
-'use client';
-
 import React, { lazy, Suspense } from 'react';
 
 const OrdersPage = lazy(() => import('./orders/page'));

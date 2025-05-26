@@ -1,7 +1,6 @@
-'use client';
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { fetchAuth } from 'src/app/services';
+import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
   token: string | null;
@@ -13,6 +12,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const router = useRouter();
+
   const [token, setToken] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       return sessionStorage.getItem('token');
@@ -30,10 +31,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       });
     } else {
+      router.push('/login');
       sessionStorage.removeItem('token');
       setToken(null);
     }
-  }, [token]);
+  }, [router, token]);
 
   const value = React.useMemo(() => ({ token, setToken }), [token, setToken]);
 

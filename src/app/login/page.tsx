@@ -25,11 +25,7 @@ export default function LoginPage() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!token) {
-      router.push('/login');
-    } else {
-      router.push('/orders');
-    }
+    if (token) router.push('/orders');
   }, [router, token]);
 
   const handleSubmit = (event: React.FormEvent) => {
