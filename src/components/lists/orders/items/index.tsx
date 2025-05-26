@@ -14,6 +14,7 @@ import {
 
 export interface Properties {
   order: OrderContent;
+  items?: OrderContent['items'];
 }
 
 export default function OrderItems(properties: Readonly<Properties>) {
@@ -21,8 +22,8 @@ export default function OrderItems(properties: Readonly<Properties>) {
   return (
     <ItemListContainer>
       <SectionTitle>{`Fornecido por ${properties.order.branchDescription}`}</SectionTitle>
-      {properties.order.items?.content.length > 0 ? (
-        properties.order.items.content.map(
+      {properties.items?.content.length > 0 ? (
+        properties.items.content.map(
           (item: OrderItemContent, index: number) => (
             <React.Fragment key={item.id}>
               <ItemContainer>
@@ -56,7 +57,7 @@ export default function OrderItems(properties: Readonly<Properties>) {
                   </div>
                 </ItemInfo>
               </ItemContainer>
-              {index < (properties.order.items.content.length ?? 0) - 1 && (
+              {index < (properties.items.content.length ?? 0) - 1 && (
                 <StyledDivider style={{ margin: '1rem 0' }} />
               )}
             </React.Fragment>

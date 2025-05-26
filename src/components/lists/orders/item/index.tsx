@@ -25,7 +25,7 @@ import {
   CardTitle,
   CardValueContainer,
 } from './styles';
-import { fetchOrderItems } from '../../../../services/fetchOrderItems';
+import { useOrderItemsQuery } from '@/hooks/useOrderItemQuery';
 
 interface Properties {
   order: OrderContent;
@@ -39,23 +39,19 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   const [visible, setVisible] = useState(false);
   const { token } = useAuthContext();
 
+  const {
+    data: orderItems,
+    isLoading,
+    isError,
+  } = useOrderItemsQuery({
+    token,
+    branch: properties.order.branch,
+    document: properties.order.document,
+    version: properties.order.version,
+    enabled: isOpen && properties.order.quantity > 0,
+  });
+
   const handleCardClick = (id: number) => {
-    if (properties.order.quantity > 0) {
-      fetchOrderItems(
-        token,
-        properties.order.branch,
-        properties.order.document,
-        properties.order.version,
-      ).then(response => {
-        if (
-          response &&
-          typeof response === 'object' &&
-          Array.isArray(response)
-        ) {
-          properties.order.items = response;
-        }
-      });
-    }
     if (isMobile) {
       setVisible(true);
     } else {
@@ -128,7 +124,9 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
       </CardBody>
       {isOpen && (
         <div style={{ width: '100%' }}>
-          <OrderContentComponent order={properties.order} />
+          {isLoading && <div>Carregando itens...</div>}
+          {isError && <div>Erro ao carregar itens do pedido.</div>}
+          <OrderContentComponent order={properties.order} items={orderItems} />
         </div>
       )}
     </CardContainer>

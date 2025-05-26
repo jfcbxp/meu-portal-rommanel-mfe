@@ -29,9 +29,13 @@ import {
 
 interface Properties {
   order: OrderContent;
+  items?: OrderContent['items'];
 }
 
-export default function OrderContentComponent({ order }: Readonly<Properties>) {
+export default function OrderContentComponent({
+  order,
+  items,
+}: Readonly<Properties>) {
   const toast = useRef<Toast>(null);
 
   const handleCopy = () => {
@@ -76,7 +80,7 @@ export default function OrderContentComponent({ order }: Readonly<Properties>) {
         <StyledDivider />
       </OrderInfoContainer>
 
-      <OrderItems order={order} />
+      <OrderItems order={order} items={items} />
 
       <PaymentMethodContainer>
         <SectionTitle>Forma de pagamento</SectionTitle>

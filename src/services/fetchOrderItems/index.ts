@@ -6,21 +6,25 @@ export const fetchOrderItems = async (
   document: string,
   version: string,
 ): Promise<OrderItem | string> => {
-  let url = new URL(`http://25.36.229.72:3000/orders`);
-  const params: Record<string, string> = {};
-  params.branch = branch;
-  params.document = document;
-  params.version = version;
+  const params = new URLSearchParams({
+    branch,
+    document,
+    version,
+  });
 
-  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
   try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_PATH || ''
+      }/api/orderItems?${params.toString()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       return `Request failed with status [${response.status}] : ${response.statusText}`;
