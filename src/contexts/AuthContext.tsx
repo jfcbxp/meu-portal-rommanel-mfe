@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { fetchAuth } from 'src/app/services';
+import { fetchAuth } from 'src/services';
 import { useRouter } from 'next/navigation';
 
 interface AuthContextType {

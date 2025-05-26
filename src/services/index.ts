@@ -46,19 +46,22 @@ export const fetchAuth = async (token: string): Promise<string> => {
 };
 
 export const fetchOrders = async (
-  token,
+  token: string,
   page?: number,
   status?: string,
-  type?,
-  startDate?,
-  endDate?,
+  type?: string,
+  startDate?: string,
+  endDate?: string,
 ): Promise<Order | string> => {
   try {
-    let url = new URL(`${baseUrl}/payments`);
+    let url = new URL(
+      `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/api/payments`,
+      window.location.origin,
+    );
     const params: Record<string, string> = {};
     if (startDate && endDate) {
-      params.startDate = startDate;
-      params.endDate = endDate;
+      params.dateStart = startDate;
+      params.dateEnd = endDate;
     }
     if (type) {
       params.type = type;
@@ -73,11 +76,11 @@ export const fetchOrders = async (
     Object.keys(params).forEach(key =>
       url.searchParams.append(key, params[key]),
     );
-    const response = await fetch(url, {
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: token, // ou `Bearer ${token}` se preferir
       },
     });
 

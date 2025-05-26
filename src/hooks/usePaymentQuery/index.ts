@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchOrders } from '../../../../services/index';
 import { Order } from '@/types/index';
+import { fetchOrders } from '../../services';
 
 export function usePaymentsQuery({
   token,

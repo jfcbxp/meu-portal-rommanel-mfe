@@ -9,7 +9,7 @@ import logo_grande from '../../../public/logo_grande.png';
 import Cpf from '@/components/inputs/cpf';
 import Button from '@/components/buttons/button';
 import useIsMobile from '@/hooks/useIsMobile';
-import { fetchLogin } from '../services';
+import { fetchLogin } from '../../services';
 import {
   LoginContainer,
   LoginForm,

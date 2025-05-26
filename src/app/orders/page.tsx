@@ -22,7 +22,7 @@ import {
   ToastInfoIcon,
   ToastInfoText,
 } from './styles';
-import { usePaymentsQuery } from './hooks/usePaymentQuery';
+import { usePaymentsQuery } from '../../hooks/usePaymentQuery';
 
 export default function OrdersPage() {
   const [paymentTypes, setPaymentTypes] = useState<Cd[]>([]);

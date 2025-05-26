@@ -13,7 +13,7 @@ import {
   FaChevronDown,
   FaBarcode,
 } from 'react-icons/fa';
-import { fetchOrderItems } from 'src/app/services';
+import { fetchOrderItems } from 'src/services';
 import {
   CardAmount,
   CardBody,
