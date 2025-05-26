@@ -180,11 +180,10 @@ const FilterEndButtons = styled.div`
 
 const FilterButtons = styled.div`
   display: flex;
-  flex-wrap: wrap; // Allow buttons to wrap on smaller screens
+  flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.small};
 `;
 
-// Styled PrimeButton for filters
 const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
   background-color: ${({ theme, $active }) =>
     $active ? theme.colors.secondary : theme.colors.background};
@@ -198,7 +197,7 @@ const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
   min-width: auto;
 
   .p-button-icon {
-    font-size: 1rem; // Adjust icon size if needed
+    font-size: 1rem;
     margin-right: ${({ theme }) => theme.spacing.small};
   }
 
@@ -218,7 +217,7 @@ const ClearButton = styled(PrimeButton)`
   min-width: auto;
 
   .p-button-icon {
-    font-size: 0.75rem; // Smaller icon
+    font-size: 0.75rem;
     margin-right: 4px;
   }
 `;

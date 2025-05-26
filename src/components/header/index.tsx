@@ -67,7 +67,6 @@ export default function Header({ title, onClick }: Readonly<HeaderProps>) {
   }
 }
 
-// Styled Components
 const Container = styled.header`
   display: flex;
   align-items: center;
@@ -83,7 +82,7 @@ const Container = styled.header`
 `;
 
 const Title = styled.span`
-  font-size: 1.125rem; // 18px
+  font-size: 1.125rem;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.text};
 `;

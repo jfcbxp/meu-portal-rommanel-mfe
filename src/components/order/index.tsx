@@ -105,13 +105,13 @@ const OrderInfoContainer = styled.div`
 `;
 
 const OrderNumber = styled.p`
-  font-size: 0.875rem; // 14px
+  font-size: 0.875rem;
   color: ${({ theme }) => theme.colors.textLight};
   margin: 0 0 ${({ theme }) => theme.spacing.small};
 `;
 
 const OrderValue = styled.p`
-  font-size: 1.5rem; // 24px
+  font-size: 1.5rem;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 ${({ theme }) => theme.spacing.medium};
@@ -125,12 +125,12 @@ const DetailsRow = styled.div`
 
 const DetailItem = styled.div`
   p:first-child {
-    font-size: 0.875rem; // 14px
+    font-size: 0.875rem;
     color: ${({ theme }) => theme.colors.textLight};
     margin: 0 0 4px;
   }
   p:last-child {
-    font-size: 1rem; // 16px
+    font-size: 1rem;
     font-weight: 500;
     color: ${({ theme }) => theme.colors.text};
     margin: 0;
@@ -142,7 +142,7 @@ const DetailItemRight = styled(DetailItem)`
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 0.875rem; // 14px
+  font-size: 0.875rem;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.textLight};
   margin: 0 0 ${({ theme }) => theme.spacing.medium};
@@ -169,7 +169,7 @@ const PaymentMethodRow = styled.div`
   }
 
   span {
-    font-size: 1rem; // 16px
+    font-size: 1rem;
     font-weight: 500;
     color: ${({ theme }) => theme.colors.text};
   }

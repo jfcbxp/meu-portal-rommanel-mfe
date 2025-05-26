@@ -163,11 +163,7 @@ const CardIconWrapper = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    #a67dff 0%,
-    #7e57c2 100%
-  ); // Gradiente roxo similar ao ícone
+  background: linear-gradient(135deg, #a67dff 0%, #7e57c2 100%);
   flex-shrink: 0;
   i {
     color: white;
@@ -182,7 +178,7 @@ const CardInfoWrapper = styled.div`
 `;
 
 const CardTitle = styled.span`
-  font-size: 0.875rem; // 14px
+  font-size: 0.875rem;
   font-weight: bolder;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 4px;
@@ -190,7 +186,7 @@ const CardTitle = styled.span`
 `;
 
 const CardSubtitle = styled.span`
-  font-size: 0.875rem; // 14px
+  font-size: 0.875rem;
   font-weight: bolder;
   color: ${({ theme }) => theme.colors.textLight};
 `;
@@ -204,14 +200,14 @@ const CardValueWrapper = styled.div`
 `;
 
 const CardAmount = styled.span`
-  font-size: 0.875rem; // 14px
+  font-size: 0.875rem;
   font-weight: bolder;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 4px;
 `;
 
 const CardItemCount = styled.span`
-  font-size: 0.75rem; // 12px
+  font-size: 0.75rem;
   font-weight: bold;
   color: ${({ theme }) => theme.colors.textLight};
   margin-bottom: 4px;

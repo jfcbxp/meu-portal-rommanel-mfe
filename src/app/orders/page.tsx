@@ -53,7 +53,6 @@ export default function OrdersPage() {
           Array.isArray(response.content)
         ) {
           setOrder(response);
-          // Só inicializa filtros uma vez
           if (!initialized.current) {
             setPaymentTypes(response.types);
             setStatus(response.status);
@@ -71,13 +70,6 @@ export default function OrdersPage() {
   const onPageChange = async event => {
     setFirst(event.first);
     setRows(event.rows);
-    await fetchData(
-      token,
-      Math.floor(event.first / event.rows) + 1,
-      statusActive?.code,
-      paymentTypeActive?.code,
-      date,
-    );
   };
 
   useEffect(() => {
@@ -162,20 +154,20 @@ export default function OrdersPage() {
             flex: isMobile ? 1 : 2,
           }}
         >
-          {token && order && (
-            <StyledPaginator
-              first={first}
-              rows={rows}
-              totalRecords={order.totalElements}
-              rowsPerPageOptions={[10, 20, 30]}
-              onPageChange={onPageChange}
-            />
-          )}
           {order && (
             <Orders
               paymentTypeActive={paymentTypeActive}
               periodActive={periodActive}
               orders={order.content}
+            />
+          )}
+
+          {token && order && (
+            <StyledPaginator
+              first={first}
+              rows={rows}
+              totalRecords={order.totalElements}
+              onPageChange={onPageChange}
             />
           )}
         </div>
@@ -184,7 +176,6 @@ export default function OrdersPage() {
   );
 }
 
-// Styled Components
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -214,7 +205,7 @@ const TitleRow = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 1.5rem; // 24px
+  font-size: 1.5rem;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
   margin: 0;
@@ -230,11 +221,10 @@ const FilterContainer = styled.div`
 
 const FilterButtons = styled.div`
   display: flex;
-  flex-wrap: wrap; // Allow buttons to wrap on smaller screens
+  flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.small};
 `;
 
-// Styled PrimeButton for filters
 const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
   background-color: ${({ theme, $active }) =>
     $active ? theme.colors.secondary : theme.colors.background};
@@ -248,7 +238,7 @@ const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
   min-width: auto;
 
   .p-button-icon {
-    font-size: 1rem; // Adjust icon size if needed
+    font-size: 1rem;
     margin-right: ${({ theme }) => theme.spacing.small};
   }
 
@@ -259,12 +249,12 @@ const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
 
 const InfoContainer = styled.div`
   display: flex;
-  align-items: flex-start; // Align icon and text to the top
+  align-items: flex-start;
   background-color: ${({ theme }) => theme.colors.info};
   border-radius: ${({ theme }) => theme.borderRadius.medium};
   padding: ${({ theme }) => theme.spacing.medium};
   margin-bottom: ${({ theme }) => theme.spacing.large};
-  border: 1px solid #bee5eb; // Slightly darker border for info color
+  border: 1px solid #bee5eb;
   gap: ${({ theme }) => theme.spacing.small};
 `;
 
@@ -285,13 +275,14 @@ const InfoIcon = styled.div`
 `;
 
 const InfoText = styled.p`
-  font-size: 0.875rem; // 14px
+  font-size: 0.875rem;
   color: ${({ theme }) => theme.colors.infoText};
   line-height: 1.4;
   margin: 0;
 `;
 
 const StyledPaginator = styled(Paginator)`
+  margin-top: 36px;
   .p-highlight {
     color: white !important;
     background: #a259d9 !important;

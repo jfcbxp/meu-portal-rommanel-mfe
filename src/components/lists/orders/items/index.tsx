@@ -70,7 +70,7 @@ const StyledDivider = styled.div`
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 0.875rem; // 14px
+  font-size: 0.875rem;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.textLight};
   margin: 0 0 ${({ theme }) => theme.spacing.medium};
@@ -84,7 +84,7 @@ const ItemListContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
   overflow: auto;
   margin-bottom: ${({ theme }) => theme.spacing.medium};
-  max-height: 50vh; // Adjust height as needed
+  max-height: 50vh;
 `;
 
 const ItemContainer = styled.div`
@@ -102,11 +102,9 @@ const ItemInfo = styled.div`
     dislpay: flex;
   }
   div:first-child p:first-child {
-    // ID
     font-weight: 500;
   }
   div:first-child p:last-child {
-    // Descrição
     color: ${({ theme }) => theme.colors.textLight};
   }
 
@@ -116,12 +114,10 @@ const ItemInfo = styled.div`
     align-items: flex-end;
   }
   div:last-child p:first-child {
-    // Quantidade
-    font-size: 0.75rem; // 12px
+    font-size: 0.75rem;
     color: ${({ theme }) => theme.colors.textLight};
   }
   div:last-child p:last-child {
-    // Valor
     font-weight: 500;
   }
 `;

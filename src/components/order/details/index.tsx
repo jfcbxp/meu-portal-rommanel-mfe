@@ -58,7 +58,6 @@ export default function OrderDetails({
   );
 }
 
-// Styled Components
 const ContentWrapper = styled.main`
   display: flex;
   flex-direction: column;

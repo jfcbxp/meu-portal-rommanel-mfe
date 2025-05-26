@@ -1,7 +1,6 @@
 import { Button as PrimeButton, ButtonProps } from 'primereact/button';
 import styled from 'styled-components';
 
-// Style the PrimeReact Button using styled()
 const StyledButton = styled(PrimeButton)`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.textWhite};
@@ -9,17 +8,17 @@ const StyledButton = styled(PrimeButton)`
     ${({ theme }) => theme.spacing.large};
   border-radius: ${({ theme }) => theme.borderRadius.large};
   width: 100%;
-  display: flex; // Needed for PrimeButton loading icon alignment
+  display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 50px; // Match reference
+  min-height: 50px;
   border: none;
   transition: background-color 0.2s ease-in-out;
   font-size: 1rem;
   font-weight: bolder;
 
   &:hover:not(:disabled) {
-    background-color: #4a2d62; // Darker purple
+    background-color: #4a2d62;
   }
 
   &:disabled {
@@ -27,10 +26,9 @@ const StyledButton = styled(PrimeButton)`
     cursor: not-allowed;
   }
 
-  // Style for loading icon (PrimeReact uses .p-button-loading-icon)
   .p-button-loading-icon {
     margin-right: ${({ theme }) => theme.spacing.small};
-    font-size: 1.2rem; // Adjust size if needed
+    font-size: 1.2rem;
   }
 `;
 

@@ -61,7 +61,6 @@ export default function LoginPage() {
   );
 }
 
-// Styled Components
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -75,12 +74,10 @@ const PageContainer = styled.div`
 const LogoContainer = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.medium};
   text-align: center;
-  // Placeholder for logo - using text for now
   span {
-    font-size: 2.5rem; // Adjust size as needed
+    font-size: 2.5rem;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.primary};
-    // Add Rommanel specific styling if an SVG/Image is available
   }
 `;
 
@@ -89,7 +86,7 @@ const Title = styled.h1`
   font-size: 16px;
   color: ${({ theme }) => theme.colors.logoText};
   margin-bottom: ${({ theme }) => theme.spacing.xlarge};
-  font-weight: bolder; // Match reference image
+  font-weight: bolder;
 `;
 
 const Form = styled.form`

@@ -9,11 +9,17 @@ export interface Order {
   days: Cd[];
   types: Cd[];
   status: Cd[];
-  content: OrderContent[];
+  content: GroupedOrders[];
   elements: number;
   totalElements: number;
   page: number;
   totalPages: number;
+}
+
+export interface GroupedOrders {
+  groupId: string;
+  description: string;
+  orders: OrderContent[];
 }
 
 export interface OrderContent {

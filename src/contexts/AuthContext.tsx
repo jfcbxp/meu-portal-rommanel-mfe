@@ -22,6 +22,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (token) {
+      console.log(
+        '%c[AuthProvider]%c Token atualizado!',
+        'background: #a259d9; color: #fff; font-weight: bold; padding: 2px 6px; border-radius: 3px;',
+        'color: #a259d9; font-weight: bold;',
+      );
       sessionStorage.setItem('token', token);
       fetchAuth(token).then(response => {
         if (response !== 'ok') {

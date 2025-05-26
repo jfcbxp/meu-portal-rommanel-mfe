@@ -2,7 +2,6 @@
 
 import React, { lazy, Suspense } from 'react';
 
-// Lazy load das páginas
 const OrdersPage = lazy(() => import('./orders/page'));
 const LoginPage = lazy(() => import('./login/page'));
 
