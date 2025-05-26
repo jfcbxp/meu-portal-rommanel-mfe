@@ -1,12 +1,11 @@
-'use client';
-
 import React, { Suspense, useRef } from 'react';
-import styled from 'styled-components';
+
 import { Toast } from 'primereact/toast';
 import OrderContentComponent from '@/components/order';
-import { Order, OrderContent } from '@/types/index';
+import { OrderContent } from '@/types/index';
 import FullScreenModal from '@/components/modals/fullscreen';
 import Header from '@/components/header';
+import { Container } from './styles';
 
 interface OrderDetailContentProps {
   order?: OrderContent;
@@ -23,11 +22,11 @@ function OrderDetailContent({
     return (
       <FullScreenModal>
         <Header title="Detalhe do Boleto" onClick={setVisible} />
-        <ContentWrapper>
+        <Container>
           <p style={{ textAlign: 'center', color: '#666' }}>
             Order não encontrado.
           </p>
-        </ContentWrapper>
+        </Container>
       </FullScreenModal>
     );
   }
@@ -57,10 +56,3 @@ export default function OrderDetails({
     </Suspense>
   );
 }
-
-// Styled Components
-const ContentWrapper = styled.main`
-  display: flex;
-  flex-direction: column;
-  padding: ${({ theme }) => theme.spacing.large};
-`;

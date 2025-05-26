@@ -1,6 +1,6 @@
 import { OrderContent } from '@/types/index';
-import styled from 'styled-components';
-import StatusChip from '../labels/status-chip';
+
+import StatusChip from '../labels/statusChip';
 import OrderItems from '../lists/orders/items';
 import Button from '../buttons/button';
 import {
@@ -13,12 +13,29 @@ import {
 import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import toBRL from '@/utils/toBRL';
+import {
+  Container,
+  DetailItem,
+  DetailItemRight,
+  DetailsRow,
+  OrderInfoContainer,
+  OrderNumber,
+  OrderValue,
+  PaymentMethodContainer,
+  PaymentMethodRow,
+  SectionTitle,
+  StyledDivider,
+} from './styles';
 
 interface Properties {
   order: OrderContent;
+  items?: OrderContent['items'];
 }
 
-export default function OrderContentComponent({ order }: Readonly<Properties>) {
+export default function OrderContentComponent({
+  order,
+  items,
+}: Readonly<Properties>) {
   const toast = useRef<Toast>(null);
 
   const handleCopy = () => {
@@ -46,7 +63,7 @@ export default function OrderContentComponent({ order }: Readonly<Properties>) {
   };
 
   return (
-    <ContentWrapper>
+    <Container>
       <OrderInfoContainer>
         <OrderNumber>{`Boleto nº ${order.document}`}</OrderNumber>
         <OrderValue>{`${toBRL(order.amount)}`}</OrderValue>
@@ -63,7 +80,7 @@ export default function OrderContentComponent({ order }: Readonly<Properties>) {
         <StyledDivider />
       </OrderInfoContainer>
 
-      <OrderItems order={order} />
+      <OrderItems order={order} items={items} />
 
       <PaymentMethodContainer>
         <SectionTitle>Forma de pagamento</SectionTitle>
@@ -90,87 +107,6 @@ export default function OrderContentComponent({ order }: Readonly<Properties>) {
         disabled={!order.barcode}
         onClick={handleCopy}
       />
-    </ContentWrapper>
+    </Container>
   );
 }
-
-const ContentWrapper = styled.main`
-  display: flex;
-  flex-direction: column;
-  padding: ${({ theme }) => theme.spacing.large};
-`;
-
-const OrderInfoContainer = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.large};
-`;
-
-const OrderNumber = styled.p`
-  font-size: 0.875rem; // 14px
-  color: ${({ theme }) => theme.colors.textLight};
-  margin: 0 0 ${({ theme }) => theme.spacing.small};
-`;
-
-const OrderValue = styled.p`
-  font-size: 1.5rem; // 24px
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0 0 ${({ theme }) => theme.spacing.medium};
-`;
-
-const DetailsRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const DetailItem = styled.div`
-  p:first-child {
-    font-size: 0.875rem; // 14px
-    color: ${({ theme }) => theme.colors.textLight};
-    margin: 0 0 4px;
-  }
-  p:last-child {
-    font-size: 1rem; // 16px
-    font-weight: 500;
-    color: ${({ theme }) => theme.colors.text};
-    margin: 0;
-  }
-`;
-
-const DetailItemRight = styled(DetailItem)`
-  text-align: right;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 0.875rem; // 14px
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.textLight};
-  margin: 0 0 ${({ theme }) => theme.spacing.medium};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
-  padding-bottom: ${({ theme }) => theme.spacing.small};
-`;
-
-const StyledDivider = styled.div`
-  margin: ${({ theme }) => theme.spacing.large} 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
-`;
-
-const PaymentMethodContainer = styled.div``;
-
-const PaymentMethodRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.small};
-  margin-bottom: ${({ theme }) => theme.spacing.medium};
-
-  i {
-    color: ${({ theme }) => theme.colors.primary};
-    font-size: 1.25rem;
-  }
-
-  span {
-    font-size: 1rem; // 16px
-    font-weight: 500;
-    color: ${({ theme }) => theme.colors.text};
-  }
-`;

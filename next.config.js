@@ -1,7 +1,7 @@
 const { DefinePlugin } = require('webpack');
 
 module.exports = {
-  output: 'export',
+  output: 'standalone',
 
   distDir: 'dist',
   reactStrictMode: true,
