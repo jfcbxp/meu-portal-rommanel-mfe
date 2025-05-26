@@ -3,24 +3,24 @@
 import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
 import logo_grande from '../../../public/logo_grande.png';
 import Cpf from '@/components/inputs/cpf';
 import Button from '@/components/buttons/button';
 import useIsMobile from '@/hooks/useIsMobile';
-import { fetchLogin } from '../../services';
+import { fetchLogin } from '../../services/fetchLogin';
 import {
   LoginContainer,
   LoginForm,
   LoginLogoContainer,
   LoginTitle,
 } from './styles';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
-  const [cpf, setCpf] = useState('69409846234');
+  const [cpf, setCpf] = useState('07256507291');
   const [isLoading, setIsLoading] = useState(false);
-  const { token, setToken } = useAuth();
+  const { token, setToken } = useAuthContext();
   const router = useRouter();
   const isMobile = useIsMobile();
 

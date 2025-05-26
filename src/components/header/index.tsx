@@ -3,7 +3,7 @@ import { FaBars, FaChevronLeft, FaTimes, FaUser } from 'react-icons/fa';
 
 import favicon from '../../../public/favicon.ico';
 import Image from 'next/image';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { HeaderContainer, HeaderMenu, HeaderTitle } from './styles';
@@ -15,7 +15,7 @@ interface HeaderProps {
 
 export default function Header({ title, onClick }: Readonly<HeaderProps>) {
   const isMobile = useIsMobile();
-  const { token } = useAuth();
+  const { token } = useAuthContext();
   const [name, setName] = useState<string>('Usuário');
 
   useEffect(() => {

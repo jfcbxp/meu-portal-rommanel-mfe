@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Order } from '@/types/index';
-import { fetchOrders } from '../../services';
+import { fetchPayments } from 'src/services/fetchPayments';
 
 export function usePaymentsQuery({
   token,
@@ -26,7 +26,7 @@ export function usePaymentsQuery({
       date?.[1]?.toISOString(),
     ],
     queryFn: async () => {
-      const result = await fetchOrders(
+      const result = await fetchPayments(
         token,
         page,
         status,

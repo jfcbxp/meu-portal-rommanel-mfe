@@ -1,13 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { fetchAuth } from 'src/services';
+import React, { useState, useEffect } from 'react';
+import { fetchMe } from 'src/services/fetchMe';
 import { useRouter } from 'next/navigation';
-
-interface AuthContextType {
-  token: string | null;
-  setToken: (token: string | null) => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from '@/contexts/AuthContext/index';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -24,7 +18,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (token) {
       sessionStorage.setItem('token', token);
-      fetchAuth(token).then(response => {
+      fetchMe(token).then(response => {
         if (response !== 'ok') {
           sessionStorage.removeItem('token');
           setToken(null);
@@ -40,12 +34,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const value = React.useMemo(() => ({ token, setToken }), [token, setToken]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

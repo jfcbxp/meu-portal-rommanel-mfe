@@ -1,7 +1,7 @@
 import StatusChip from '@/components/labels/statusChip';
 import OrderContentComponent from '@/components/order';
 import OrderDetails from '@/components/order/details';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthContext } from '@/contexts/AuthContext';
 import useIsMobile from '@/hooks/useIsMobile';
 import { OrderContent } from '@/types/index';
 import toBRL from '@/utils/toBRL';
@@ -13,7 +13,6 @@ import {
   FaChevronDown,
   FaBarcode,
 } from 'react-icons/fa';
-import { fetchOrderItems } from 'src/services';
 import {
   CardAmount,
   CardBody,
@@ -26,6 +25,7 @@ import {
   CardTitle,
   CardValueContainer,
 } from './styles';
+import { fetchOrderItems } from '../../../../services/fetchOrderItems';
 
 interface Properties {
   order: OrderContent;
@@ -37,7 +37,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
   const isOpen = properties.orderId === properties.order.id;
   const [visible, setVisible] = useState(false);
-  const { token } = useAuth();
+  const { token } = useAuthContext();
 
   const handleCardClick = (id: number) => {
     if (properties.order.quantity > 0) {

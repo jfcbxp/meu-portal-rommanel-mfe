@@ -1,7 +1,7 @@
 import { Cd, GroupedOrders } from '@/types/index';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 import OrderItemComponent from './item';
 import theme from '@/styles/theme';
@@ -15,7 +15,7 @@ interface Properties {
 
 export default function Orders(properties: Readonly<Properties>) {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token } = useAuthContext();
   const [orderId, setOrderId] = useState<number>();
 
   useEffect(() => {

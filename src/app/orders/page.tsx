@@ -7,7 +7,7 @@ import useIsMobile from '@/hooks/useIsMobile';
 import Header from '@/components/header';
 import OrdersFilter from '@/components/filters/orders';
 import { Cd } from '@/types/index';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthContext } from '@/contexts/AuthContext';
 import {
   PaymentBreadcrumb,
   PaymentContainer,
@@ -33,7 +33,7 @@ export default function OrdersPage() {
   const [periodActive, setPeriodActive] = useState<Cd>();
   const isMobile = useIsMobile();
   const [visible, setVisible] = useState(false);
-  const { token } = useAuth();
+  const { token } = useAuthContext();
   const [date, setDate] = React.useState<Date[] | undefined>();
 
   const [first, setFirst] = useState(0);
