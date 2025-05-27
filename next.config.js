@@ -8,7 +8,7 @@ module.exports = {
 
   cacheMaxMemorySize: 0,
 
-  basePath: '/meu-portal-rommanel-mfe',
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '/meu-portal-rommanel-mfe',
 
   images: {
     unoptimized: true,
