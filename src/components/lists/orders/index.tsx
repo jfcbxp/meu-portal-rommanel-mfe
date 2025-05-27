@@ -11,6 +11,7 @@ interface Properties {
   paymentTypeActive: Cd;
   periodActive: Cd;
   orders?: GroupedOrders[];
+  loading?: boolean;
 }
 
 export default function Orders(properties: Readonly<Properties>) {

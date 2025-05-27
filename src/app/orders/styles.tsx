@@ -31,7 +31,7 @@ export const PaymentFilterTitleContainer = styled.div`
 `;
 
 export const PaymentFilterTitle = styled.h1`
-  font-size: 1.5rem;
+  font-size: larger;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
   margin: 0;

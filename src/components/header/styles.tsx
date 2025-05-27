@@ -21,7 +21,9 @@ export const HeaderTitle = styled.span`
 `;
 
 export const HeaderMenu = styled.div`
+  width: 50%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.small};
 `;

@@ -48,7 +48,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
     branch: properties.order.branch,
     document: properties.order.document,
     version: properties.order.version,
-    enabled: isOpen && properties.order.quantity > 0,
+    enabled: (visible || isOpen) && properties.order.quantity > 0,
   });
 
   const handleCardClick = (id: number) => {
@@ -89,7 +89,13 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   }
 
   if (visible) {
-    return <OrderDetails setVisible={setVisible} order={properties.order} />;
+    return (
+      <OrderDetails
+        setVisible={setVisible}
+        order={properties.order}
+        items={orderItems}
+      />
+    );
   }
 
   return (

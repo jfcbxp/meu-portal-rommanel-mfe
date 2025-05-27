@@ -50,7 +50,7 @@ export default function OrdersFilter({
       <FullScreenModal>
         <Header title="Filtrar" onClick={() => setVisible(false)} />
         <Container>
-          <h3>Tipo</h3>
+          <h5>Tipo</h5>
           <ButtonsContainer>
             {paymentTypes?.map(paymentType => (
               <FilterButton
@@ -65,7 +65,7 @@ export default function OrdersFilter({
               />
             ))}
           </ButtonsContainer>
-          <h3>Situação</h3>
+          <h5>Situação</h5>
           <ButtonsContainer>
             {status?.map(item => (
               <FilterButton
@@ -80,7 +80,7 @@ export default function OrdersFilter({
               />
             ))}
           </ButtonsContainer>
-          <h3>Período</h3>
+          <h5>Período</h5>
           <ButtonsContainer>
             {periods?.map(period => (
               <FilterButton
@@ -115,7 +115,7 @@ export default function OrdersFilter({
   } else {
     return (
       <Container>
-        <h3>Tipo</h3>
+        <h5>Tipo</h5>
         <ButtonsContainer>
           {paymentTypes?.map(paymentType => (
             <FilterButton
@@ -130,7 +130,7 @@ export default function OrdersFilter({
             />
           ))}
         </ButtonsContainer>
-        <h3>Situação</h3>
+        <h5>Situação</h5>
         <ButtonsContainer>
           {status?.map(item => (
             <FilterButton
@@ -145,7 +145,7 @@ export default function OrdersFilter({
             />
           ))}
         </ButtonsContainer>
-        <h3>Período</h3>
+        <h5>Período</h5>
         <ButtonsContainer>
           {periods?.map(period => (
             <FilterButton

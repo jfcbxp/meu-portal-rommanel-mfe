@@ -10,10 +10,12 @@ import { Container } from './styles';
 interface OrderDetailContentProps {
   order?: OrderContent;
   setVisible: (visible: boolean) => void;
+  items?: OrderContent['items'];
 }
 
 function OrderDetailContent({
   order,
+  items,
   setVisible,
 }: Readonly<OrderDetailContentProps>) {
   const toast = useRef<Toast>(null);
@@ -24,7 +26,7 @@ function OrderDetailContent({
         <Header title="Detalhe do Boleto" onClick={setVisible} />
         <Container>
           <p style={{ textAlign: 'center', color: '#666' }}>
-            Order não encontrado.
+            Boleto não encontrado.
           </p>
         </Container>
       </FullScreenModal>
@@ -36,23 +38,25 @@ function OrderDetailContent({
       <Toast ref={toast} />
       <Header title="Detalhe do Boleto" onClick={setVisible} />
 
-      <OrderContentComponent order={order} />
+      <OrderContentComponent order={order} items={items} />
     </FullScreenModal>
   );
 }
 
 interface OrderDetailsProps {
   order?: OrderContent;
+  items?: OrderContent['items'];
   setVisible: (visible: boolean) => void;
 }
 
 export default function OrderDetails({
   order,
+  items,
   setVisible,
 }: Readonly<OrderDetailsProps>) {
   return (
     <Suspense fallback={<p>Carregando...</p>}>
-      <OrderDetailContent order={order} setVisible={setVisible} />
+      <OrderDetailContent order={order} items={items} setVisible={setVisible} />
     </Suspense>
   );
 }
