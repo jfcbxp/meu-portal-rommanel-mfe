@@ -6,7 +6,7 @@ import useIsMobile from '@/hooks/useIsMobile';
 import { OrderContent } from '@/types/index';
 import toBRL from '@/utils/toBRL';
 import { Image } from 'primereact/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FaChevronRight,
   FaChevronUp,
@@ -37,9 +37,13 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
   const isOpen = properties.orderId === properties.order.id;
   const [visible, setVisible] = useState(false);
-  const { token } = useAuthContext();
+  const { token, checkRequestError } = useAuthContext();
 
-  const { data: orderItems, isError } = useOrderItemsQuery({
+  const {
+    data: orderItems,
+    isError,
+    error,
+  } = useOrderItemsQuery({
     token,
     branch: properties.order.branch,
     document: properties.order.document,
@@ -83,6 +87,10 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
       />
     );
   }
+
+  useEffect(() => {
+    checkRequestError(error);
+  }, [error, checkRequestError]);
 
   if (visible) {
     return (

@@ -34,7 +34,6 @@ export const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
     $active ? theme.colors.primary : theme.colors.secondary};
   color: ${({ theme, $active }) =>
     $active ? 'white' : theme.colors.textLight};
-  border: 1px solid ${({ theme }) => theme.colors.inputBorder};
   border-radius: ${({ theme }) => theme.borderRadius.medium};
   padding: ${({ theme }) => theme.spacing.small};
   font-size: smaller;
@@ -44,6 +43,10 @@ export const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
   .p-button-icon {
     font-size: 1rem;
     margin-right: ${({ theme }) => theme.spacing.small};
+  }
+
+  .p-button-label {
+    font-weight: 400;
   }
 
   &:hover:not(:disabled) {

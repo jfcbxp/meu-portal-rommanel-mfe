@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { fetchMe } from 'src/services/fetchMe';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/contexts/AuthContext/index';
@@ -14,6 +14,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
     return null;
   });
+
+  const checkRequestError = useCallback(
+    (error: Error) => {
+      if (
+        error &&
+        typeof error.message === 'string' &&
+        error.message.includes('401')
+      ) {
+        setToken(null);
+      }
+    },
+    [setToken],
+  );
 
   useEffect(() => {
     if (token) {
@@ -31,7 +44,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [router, token]);
 
-  const value = React.useMemo(() => ({ token, setToken }), [token, setToken]);
+  const value = React.useMemo(
+    () => ({ token, setToken, checkRequestError }),
+    [token, setToken, checkRequestError],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

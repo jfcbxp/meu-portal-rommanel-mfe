@@ -34,7 +34,7 @@ export default function OrdersPage() {
   const [periodActive, setPeriodActive] = useState<Cd>();
   const isMobile = useIsMobile();
   const [visible, setVisible] = useState(false);
-  const { token } = useAuthContext();
+  const { token, checkRequestError } = useAuthContext();
   const [date, setDate] = React.useState<Date[] | undefined>();
 
   const [first, setFirst] = useState(0);
@@ -45,6 +45,7 @@ export default function OrdersPage() {
     data: order,
     isLoading,
     isError,
+    error,
   } = usePaymentsQuery({
     token,
     page: Math.floor(first / rows) + 1,
@@ -53,6 +54,10 @@ export default function OrdersPage() {
     startDate: date?.[0]?.toISOString().split('T')[0],
     endDate: date?.[1]?.toISOString().split('T')[0],
   });
+
+  useEffect(() => {
+    checkRequestError(error);
+  }, [error, checkRequestError]);
 
   useEffect(() => {
     if (
