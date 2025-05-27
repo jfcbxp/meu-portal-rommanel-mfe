@@ -5,7 +5,8 @@
   "scripts": {
     "commit": "git-cz",
     "dev": "SET NEXT_PRIVATE_LOCAL_WEBPACK=true && next dev -p 3006",
-    "build": "SET NEXT_PRIVATE_LOCAL_WEBPACK=true && node envs.js && next build",
+    "build": "export NEXT_PRIVATE_LOCAL_WEBPACK=true && node envs.js && next build",
+    "build:windows": "SET NEXT_PRIVATE_LOCAL_WEBPACK=true && node envs.js && next build",
     "format": "prettier '**/*.{ts,tsx}' --write",
     "start": "SET NEXT_PRIVATE_LOCAL_WEBPACK=true && export NODE_ENV=production && next start -p 3006",
     "deploy": "bash deploy.bash",
