@@ -9,15 +9,14 @@ export async function GET(req: NextRequest) {
   const dateStart = searchParams.get('dateStart');
   const dateEnd = searchParams.get('dateEnd');
   const token = req.headers.get('authorization');
+  const apiBaseUrl = process.env.API_BASE_URL || '';
 
-  const backendUrl = new URL('http://25.36.229.72:3000/payments');
+  const backendUrl = new URL(`${apiBaseUrl}/payments`);
   if (page) backendUrl.searchParams.append('page', page);
   if (status) backendUrl.searchParams.append('status', status);
   if (type) backendUrl.searchParams.append('type', type);
   if (dateStart) backendUrl.searchParams.append('dateStart', dateStart);
   if (dateEnd) backendUrl.searchParams.append('dateEnd', dateEnd);
-
-  console.log(token);
 
   const response = await fetch(backendUrl.toString(), {
     headers: {
@@ -26,10 +25,6 @@ export async function GET(req: NextRequest) {
     },
     cache: 'no-store',
   });
-
-  console.log('Request:', backendUrl.toString());
-
-  console.log('Response status:', response.status);
 
   const data = await response.json();
   return NextResponse.json(data, { status: response.status });

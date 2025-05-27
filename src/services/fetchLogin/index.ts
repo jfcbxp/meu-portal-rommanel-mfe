@@ -1,13 +1,13 @@
 export const fetchLogin = async (cpf: string): Promise<string> => {
   try {
-    const response = await fetch(`http://25.36.229.72:3000/auth/login`, {
+    const url = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/api/login`;
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        id: cpf,
-      }),
+      body: JSON.stringify({ cpf }),
     });
 
     if (!response.ok) {
