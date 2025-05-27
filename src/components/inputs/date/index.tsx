@@ -53,7 +53,7 @@ export default function DateInput(
   return (
     <StyledCalendar
       {...properties}
-      placeholder="DD/MM/AAAA - DD/MM/AAAA"
+      placeholder="Data (De - Até)"
       dateFormat="dd/mm/yy"
       selectionMode="range"
       readOnlyInput

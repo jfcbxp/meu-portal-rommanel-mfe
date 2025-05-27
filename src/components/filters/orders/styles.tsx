@@ -3,10 +3,14 @@ import { Button as PrimeButton } from 'primereact/button';
 
 export const Container = styled.main`
   display: flex;
-  gap: ${({ theme }) => theme.spacing.large};
+  gap: ${({ theme }) => theme.spacing.medium};
   flex-direction: column;
-  padding: ${({ theme }) => theme.spacing.large};
+  padding: ${({ theme }) => theme.spacing.medium};
   height: 100%;
+
+  h5: {
+    color: ${({ theme }) => theme.colors.text};
+  }
 `;
 
 export const FooterContainer = styled.div`
@@ -27,13 +31,13 @@ export const ButtonsContainer = styled.div`
 
 export const FilterButton = styled(PrimeButton)<{ $active?: boolean }>`
   background-color: ${({ theme, $active }) =>
-    $active ? theme.colors.secondary : theme.colors.background};
-  color: ${({ theme }) => theme.colors.textLight};
+    $active ? theme.colors.primary : theme.colors.secondary};
+  color: ${({ theme, $active }) =>
+    $active ? 'white' : theme.colors.textLight};
   border: 1px solid ${({ theme }) => theme.colors.inputBorder};
   border-radius: ${({ theme }) => theme.borderRadius.medium};
-  padding: ${({ theme }) => theme.spacing.small}
-    ${({ theme }) => theme.spacing.medium};
-  font-size: 0.875rem;
+  padding: ${({ theme }) => theme.spacing.small};
+  font-size: smaller;
   height: auto;
   min-width: auto;
 

@@ -1,5 +1,5 @@
 import useIsMobile from '@/hooks/useIsMobile';
-import { FaBars, FaChevronLeft, FaTimes, FaUser } from 'react-icons/fa';
+import { FaChevronLeft, FaSignOutAlt, FaTimes } from 'react-icons/fa';
 
 import favicon from '../../../public/favicon.ico';
 import Image from 'next/image';
@@ -15,7 +15,7 @@ interface HeaderProps {
 
 export default function Header({ title, onClick }: Readonly<HeaderProps>) {
   const isMobile = useIsMobile();
-  const { token } = useAuthContext();
+  const { token, setToken } = useAuthContext();
   const [name, setName] = useState<string>('Usuário');
 
   useEffect(() => {
@@ -29,11 +29,21 @@ export default function Header({ title, onClick }: Readonly<HeaderProps>) {
       <HeaderContainer>
         <Image alt="favicon" src={favicon} />
         {isMobile ? (
-          <FaBars size={32} color="purple" style={{ cursor: 'pointer' }} />
+          <FaSignOutAlt
+            onClick={() => setToken(null)}
+            size={32}
+            color="purple"
+            style={{ cursor: 'pointer' }}
+          />
         ) : (
           <HeaderMenu>
-            <FaUser size={24} color="purple" />
             {`Olá, ${name}`}
+            <FaSignOutAlt
+              onClick={() => setToken(null)}
+              size={24}
+              color="purple"
+              style={{ cursor: 'pointer' }}
+            />
           </HeaderMenu>
         )}
       </HeaderContainer>
