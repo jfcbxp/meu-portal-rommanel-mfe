@@ -35,12 +35,16 @@ export const ItemInfo = styled.div`
   justify-content: space-between;
 
   div:first-child {
-    dislpay: flex;
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing.small};
   }
   div:first-child p:first-child {
-    font-weight: 500;
+    font-size: smaller;
+    color: ${({ theme }) => theme.colors.text};
   }
   div:first-child p:last-child {
+    font-size: small;
     color: ${({ theme }) => theme.colors.textLight};
   }
 
@@ -48,12 +52,18 @@ export const ItemInfo = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    gap: 0.25rem;
   }
   div:last-child p:first-child {
     font-size: 0.75rem;
     color: ${({ theme }) => theme.colors.textLight};
   }
+  div:last-child p:nth-child(2) {
+    font-size: 0.875rem;
+    color: ${({ theme }) => theme.colors.text};
+  }
   div:last-child p:last-child {
-    font-weight: 500;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.primary};
   }
 `;

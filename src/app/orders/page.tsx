@@ -23,6 +23,7 @@ import {
   ToastInfoText,
 } from './styles';
 import { usePaymentsQuery } from '../../hooks/usePaymentQuery';
+import LoadingComponent from '@/components/loading';
 
 export default function OrdersPage() {
   const [paymentTypes, setPaymentTypes] = useState<Cd[]>([]);
@@ -49,7 +50,8 @@ export default function OrdersPage() {
     page: Math.floor(first / rows) + 1,
     status: statusActive?.code,
     type: paymentTypeActive?.code,
-    date,
+    startDate: date?.[0]?.toISOString().split('T')[0],
+    endDate: date?.[1]?.toISOString().split('T')[0],
   });
 
   useEffect(() => {
@@ -65,6 +67,25 @@ export default function OrdersPage() {
       initialized.current = true;
     }
   }, [order]);
+
+  useEffect(() => {
+    if (periodActive?.code) {
+      const days = parseInt(periodActive.code, 10);
+      const today = new Date();
+      const startDate = new Date(today);
+      startDate.setDate(today.getDate() - days);
+
+      const endDate = new Date(today);
+      endDate.setDate(today.getDate() + days);
+
+      console.log(
+        'Setting date:',
+        startDate.toISOString().split('T')[0],
+        endDate.toISOString().split('T')[0],
+      );
+      setDate([startDate, endDate]);
+    }
+  }, [periodActive]);
 
   const onPageChange = async event => {
     setFirst(event.first);
@@ -90,7 +111,7 @@ export default function OrdersPage() {
     );
   }
 
-  if (isLoading) return <div>Carregando pedidos...</div>;
+  if (isLoading) return <LoadingComponent />;
   if (isError) return <div>Erro ao carregar pedidos.</div>;
 
   return (

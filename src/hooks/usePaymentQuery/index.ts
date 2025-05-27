@@ -7,32 +7,26 @@ export function usePaymentsQuery({
   page,
   status,
   type,
-  date,
+  startDate,
+  endDate,
 }: {
   token: string;
   page: number;
   status?: string;
   type?: string;
-  date?: Date[];
+  startDate?: string;
+  endDate?: string;
 }) {
   return useQuery<Order, Error>({
-    queryKey: [
-      'payments',
-      token,
-      page,
-      status,
-      type,
-      date?.[0]?.toISOString(),
-      date?.[1]?.toISOString(),
-    ],
+    queryKey: ['payments', token, page, status, type, startDate, endDate],
     queryFn: async () => {
       const result = await fetchPayments(
         token,
         page,
         status,
         type,
-        date?.[0]?.toISOString().split('T')[0],
-        date?.[1]?.toISOString().split('T')[0],
+        startDate,
+        endDate,
       );
       if (typeof result === 'string') {
         throw new Error(result);
