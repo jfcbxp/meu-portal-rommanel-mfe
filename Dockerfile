@@ -4,13 +4,13 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.env* ./
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/yarn.lock ./
+COPY .next/standalone ./ 
+COPY .next/static ./.next/static
+COPY public ./public
+COPY .env* ./
+COPY next.config.js ./
+COPY package.json ./
+COPY yarn.lock ./
 
 RUN yarn install --production --frozen-lockfile
 
