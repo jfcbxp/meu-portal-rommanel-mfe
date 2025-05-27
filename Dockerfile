@@ -1,18 +1,26 @@
-FROM node:20-alpine
+# Etapa de build
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN yarn install --frozen-lockfile
+RUN yarn build
+
+# Etapa de produção
+FROM node:20-alpine AS runner
 
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV PORT=3006
 
-COPY dist/standalone ./ 
-COPY dist/static ./dist/static
-COPY public ./public
-COPY .env* ./
-COPY next.config.js ./
-COPY package.json ./
-COPY yarn.lock ./
-
-RUN yarn install --production --frozen-lockfile
+# Copia apenas os arquivos necessários do build
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/.env* ./
 
 EXPOSE 3006
 

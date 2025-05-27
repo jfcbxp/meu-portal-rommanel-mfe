@@ -2,21 +2,25 @@ name: Nextjs Docker Image
 
 on:
   push:
-    branches: ['develop']
+    branches:
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-  buildservice:
-    name: build
+  build-and-push:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Generate build number
         id: buildnumber
         uses: einaregilsson/build-number@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
       - name: Read Docker properties
         uses: madhead/read-java-properties@latest
@@ -24,17 +28,6 @@ jobs:
         with:
           file: docker.properties
           all: true
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build app
-        run: yarn build
 
       - name: DockerHub login
         uses: docker/login-action@v1
@@ -50,6 +43,3 @@ jobs:
           tags: |
             jfcbxp/${{ steps.docker.outputs.IMAGE_NAME }}:${{ steps.docker.outputs.MAJOR_VERSION }}.${{ steps.docker.outputs.MINOR_VERSION }}.${{ steps.buildnumber.outputs.build_number }}
             jfcbxp/${{ steps.docker.outputs.IMAGE_NAME }}:latest
-          build-args: |
-            ARTIFACT_NAME=${{ steps.docker.outputs.ARTIFACT_NAME }}
-            IMAGE_VERSION=${{ steps.docker.outputs.IMAGE_NAME }}:${{ steps.docker.outputs.MAJOR_VERSION }}.${{ steps.docker.outputs.MINOR_VERSION }}.${{ steps.buildnumber.outputs.build_number }}
