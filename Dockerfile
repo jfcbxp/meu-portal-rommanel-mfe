@@ -4,8 +4,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY .next/standalone ./ 
-COPY .next/static ./.next/static
+COPY dist/standalone ./ 
+COPY dist/static ./dist/static
 COPY public ./public
 COPY .env* ./
 COPY next.config.js ./
