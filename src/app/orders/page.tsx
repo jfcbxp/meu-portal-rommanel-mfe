@@ -78,11 +78,6 @@ export default function OrdersPage() {
       const endDate = new Date(today);
       endDate.setDate(today.getDate() + days);
 
-      console.log(
-        'Setting date:',
-        startDate.toISOString().split('T')[0],
-        endDate.toISOString().split('T')[0],
-      );
       setDate([startDate, endDate]);
     }
   }, [periodActive]);

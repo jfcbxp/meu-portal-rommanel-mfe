@@ -1,10 +1,12 @@
 export const fetchMe = async (token: string): Promise<string> => {
   try {
-    const response = await fetch(`http://25.36.229.72:3000/auth/me`, {
+    const url = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/api/me`;
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
     });
 

@@ -39,11 +39,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   const [visible, setVisible] = useState(false);
   const { token } = useAuthContext();
 
-  const {
-    data: orderItems,
-    isLoading,
-    isError,
-  } = useOrderItemsQuery({
+  const { data: orderItems, isError } = useOrderItemsQuery({
     token,
     branch: properties.order.branch,
     document: properties.order.document,
@@ -130,7 +126,6 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
       </CardBody>
       {isOpen && (
         <div style={{ width: '100%' }}>
-          {isLoading && <div>Carregando itens...</div>}
           {isError && <div>Erro ao carregar itens do pedido.</div>}
           <OrderContentComponent order={properties.order} items={orderItems} />
         </div>
