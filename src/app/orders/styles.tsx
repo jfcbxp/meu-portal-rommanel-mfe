@@ -7,6 +7,11 @@ export const PaymentContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.background};
+
+  @media (min-width: 1366px) {
+    max-width: 1440px;
+    gap: 24px;
+  }
 `;
 
 export const PaymentBreadcrumb = styled.div`
@@ -43,6 +48,10 @@ export const PaymentFilterContainer = styled.div`
   flex: 1;
   gap: ${({ theme }) => theme.spacing.small};
   margin-bottom: ${({ theme }) => theme.spacing.large};
+
+  @media (min-width: 1025px) {
+    max-width: 448px;
+  }
 `;
 
 export const PaymentFilterButtonsContainer = styled.div`

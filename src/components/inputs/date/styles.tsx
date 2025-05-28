@@ -2,15 +2,14 @@ import { Calendar } from 'primereact/calendar';
 import { styled } from 'styled-components';
 
 export const StyledCalendar = styled(Calendar)`
-  display: inline-block;
-  position: relative;
+  max-width: 170px;
 
   & input[type='text'] {
     width: 100%;
     box-sizing: border-box;
     padding: 8px 12px;
     border: 1px solid ${({ theme }) => theme.colors.inputBorder || '#ccc'};
-    border-radius: ${({ theme }) => theme.borderRadius.medium || '8px'};
+
     font-size: 1rem;
     font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     transition: border-color 0.2s, box-shadow 0.2s;

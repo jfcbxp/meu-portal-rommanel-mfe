@@ -105,16 +105,24 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   return (
     <CardContainer key={properties.order.id}>
       <CardHeader>
-        <CardSubtitle>{`nº ${properties.order.document}`}</CardSubtitle>
+        <CardSubtitle>{`nº ${
+          properties.order.document + ' - ' + properties.order.installment
+        }`}</CardSubtitle>
         <StatusChip status={properties.order.status} />
       </CardHeader>
       <CardBody>
         <CardIconContainer>
-          {properties.order.image ? (
-            <Image alt="image" src={properties.order.image} />
-          ) : (
-            <FaBarcode color="white" />
-          )}
+          <Image
+            alt="image"
+            width={isMobile ? '48' : '56'}
+            height={isMobile ? '48' : '56'}
+            src={
+              properties.order.image ? properties.order.image : 'no-image.png'
+            }
+            onError={e => {
+              (e.target as HTMLImageElement).src = 'no-image.png';
+            }}
+          />
         </CardIconContainer>
         <CardInfoContainer>
           <CardTitle>{properties.order.product}</CardTitle>

@@ -3,7 +3,7 @@ import { addLocale } from 'primereact/api';
 import { StyledCalendar } from './styles';
 
 export default function DateInput(
-  properties: Readonly<CalendarProps<'multiple', Date[]>>,
+  properties: Readonly<CalendarProps<'single', Date>>,
 ) {
   addLocale('pt-BR', {
     firstDayOfWeek: 0,
@@ -53,11 +53,13 @@ export default function DateInput(
   return (
     <StyledCalendar
       {...properties}
-      placeholder="Data (De - Até)"
+      placeholder="Escolha um dia"
       dateFormat="dd/mm/yy"
-      selectionMode="range"
+      selectionMode="single"
+      showIcon
       readOnlyInput
       hideOnRangeSelection
+      showButtonBar
       locale="pt-BR"
     />
   );

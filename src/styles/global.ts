@@ -50,21 +50,12 @@ const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
 
   button {
-    cursor: pointer;
     border: none;
-    background: none;
-    font-family: inherit;
   }
 
-  input, textarea, button, select, a {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-  }
+
 `;
 
 export default GlobalStyle;
