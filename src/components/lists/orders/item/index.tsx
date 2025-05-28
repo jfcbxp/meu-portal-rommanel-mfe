@@ -113,7 +113,15 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
       <CardBody>
         <CardIconContainer>
           {properties.order.image ? (
-            <Image alt="image" src={properties.order.image} />
+            <Image
+              alt="image"
+              width={isMobile ? '48' : '56'}
+              height={isMobile ? '48' : '56'}
+              src={properties.order.image}
+              onError={e => {
+                (e.target as HTMLImageElement).src = 'no-image.png';
+              }}
+            />
           ) : (
             <FaBarcode color="white" />
           )}

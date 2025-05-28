@@ -32,15 +32,18 @@ export default function OrderItems(properties: Readonly<Properties>) {
               <Image
                 alt=""
                 src={item.image}
-                width={isMobile ? '48' : '32'}
-                height={isMobile ? '48' : '32'}
+                width={isMobile ? '48' : '56'}
+                height={isMobile ? '48' : '56'}
+                onError={e => {
+                  (e.target as HTMLImageElement).src = 'no-image.png';
+                }}
               />
             ) : (
               <Image
                 alt=""
-                src={favicon.src}
-                width={isMobile ? '48' : '32'}
-                height={isMobile ? '48' : '32'}
+                src={'no-image.png'}
+                width={isMobile ? '48' : '56'}
+                height={isMobile ? '48' : '56'}
               />
             )}
 
