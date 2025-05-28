@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Orders from '@/components/lists/orders';
 import useIsMobile from '@/hooks/useIsMobile';
@@ -42,25 +42,30 @@ export default function OrdersPage() {
   const [rows, setRows] = useState(10);
   const initialized = useRef(false);
 
-  const hasDates = () => {
-    if ((startDate && !endDate) || (!startDate && endDate)) return false;
-    if (isMobile && visible) return false;
-    return true;
-  };
+  const filters = useMemo(
+    () => ({
+      period: periodActive?.code,
+      type: paymentTypeActive?.code,
+      status: statusActive?.code,
+      start: startDate?.toISOString().split('T')[0],
+      end: endDate?.toISOString().split('T')[0],
+    }),
+    [periodActive, paymentTypeActive, statusActive, startDate, endDate],
+  );
+
+  const [activeFilters, setActiveFilters] = useState(filters);
 
   const {
     data: order,
     isLoading,
-    isError,
     error,
   } = usePaymentsQuery({
     token,
     page: Math.floor(first / rows) + 1,
-    status: statusActive?.code,
-    type: paymentTypeActive?.code,
-    startDate: startDate?.toISOString().split('T')[0],
-    endDate: endDate?.toISOString().split('T')[0],
-    enabled: hasDates(),
+    status: activeFilters.status,
+    type: activeFilters.type,
+    startDate: activeFilters.start,
+    endDate: activeFilters.end,
   });
 
   useEffect(() => {
@@ -100,14 +105,25 @@ export default function OrdersPage() {
   }, [periodActive]);
 
   useEffect(() => {
-    setFirst(0);
-    setRows(10);
-  }, [periodActive, paymentTypeActive, statusActive, endDate, startDate]);
+    if (
+      (filters.start && !filters.end) ||
+      (!filters.start && filters.end) ||
+      (isMobile && visible)
+    ) {
+      return;
+    }
+    if (JSON.stringify(filters) !== JSON.stringify(activeFilters)) {
+      setFirst(0);
+      setActiveFilters(filters);
+    }
+  }, [filters, activeFilters, isMobile, visible]);
 
   const onPageChange = async event => {
     setFirst(event.first);
     setRows(event.rows);
   };
+
+  if (!token || isLoading) return <LoadingComponent />;
 
   if (visible) {
     return (
@@ -129,9 +145,6 @@ export default function OrdersPage() {
       ></OrdersFilter>
     );
   }
-
-  if (isLoading) return <LoadingComponent />;
-  if (isError) return <div>Erro ao carregar pedidos.</div>;
 
   return (
     <PaymentContainer>

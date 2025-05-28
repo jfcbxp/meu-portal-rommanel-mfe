@@ -3,7 +3,6 @@ import { OrderContent, OrderItemContent } from '@/types/index';
 import useIsMobile from '@/hooks/useIsMobile';
 import toBRL from '@/utils/toBRL';
 import { Image } from 'primereact/image';
-import favicon from '../../../../../public/favicon.ico';
 import { ProgressBar } from 'primereact/progressbar';
 import {
   ItemContainer,
@@ -28,24 +27,15 @@ export default function OrderItems(properties: Readonly<Properties>) {
       (item: OrderItemContent, index: number) => (
         <React.Fragment key={item.id}>
           <ItemContainer>
-            {item.image ? (
-              <Image
-                alt=""
-                src={item.image}
-                width={isMobile ? '48' : '56'}
-                height={isMobile ? '48' : '56'}
-                onError={e => {
-                  (e.target as HTMLImageElement).src = 'no-image.png';
-                }}
-              />
-            ) : (
-              <Image
-                alt=""
-                src={'no-image.png'}
-                width={isMobile ? '48' : '56'}
-                height={isMobile ? '48' : '56'}
-              />
-            )}
+            <Image
+              alt=""
+              src={item.image ? item.image : 'no-image.png'}
+              width={isMobile ? '48' : '56'}
+              height={isMobile ? '48' : '56'}
+              onError={e => {
+                (e.target as HTMLImageElement).src = 'no-image.png';
+              }}
+            />
 
             <ItemInfo>
               <div>
