@@ -65,7 +65,7 @@ export default function OrderContentComponent({
   return (
     <Container>
       <OrderInfoContainer>
-        <OrderNumber>{`Boleto nº ${order.document}`}</OrderNumber>
+        <OrderNumber>{`Valor referente a parcela nº ${order.installment}`}</OrderNumber>
         <OrderValue>{`${toBRL(order.amount)}`}</OrderValue>
         <DetailsRow>
           <DetailItem>
@@ -89,21 +89,21 @@ export default function OrderContentComponent({
             switch (order.type) {
               case 'BOL':
                 return <FaBarcode size={24} />;
-              case 'CreditCard':
-                return <FaRegCreditCard size={24} />;
-              case 'Pix':
+              case 'NP':
                 return <FaQrcode size={24} />;
               default:
                 return <FaMoneyBill size={24} />;
             }
           })()}
-          <span>{order.type}</span>
+          <span>{order.typeDescription}</span>
         </PaymentMethodRow>
       </PaymentMethodContainer>
 
       <Button
         icon={<FaClipboard size={24} style={{ marginRight: '0.5rem' }} />}
-        label="Copiar Código de Barras"
+        label={
+          order.type == 'BOL' ? 'Copiar Código de Barras' : 'Copiar Código Pix'
+        }
         disabled={!order.barcode}
         onClick={handleCopy}
       />

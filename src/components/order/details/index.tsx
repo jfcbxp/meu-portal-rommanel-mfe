@@ -23,10 +23,10 @@ function OrderDetailContent({
   if (!order) {
     return (
       <FullScreenModal>
-        <Header title="Detalhe do Boleto" onClick={setVisible} />
+        <Header title="Detalhes do Pagamento" onClick={setVisible} />
         <Container>
           <p style={{ textAlign: 'center', color: '#666' }}>
-            Boleto não encontrado.
+            Pagamento não encontrado.
           </p>
         </Container>
       </FullScreenModal>
@@ -36,7 +36,7 @@ function OrderDetailContent({
   return (
     <FullScreenModal>
       <Toast ref={toast} />
-      <Header title="Detalhe do Boleto" onClick={setVisible} />
+      <Header title="Detalhes do Pagamento" onClick={setVisible} />
 
       <OrderContentComponent order={order} items={items} />
     </FullScreenModal>
