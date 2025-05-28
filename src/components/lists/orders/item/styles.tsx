@@ -38,8 +38,7 @@ export const CardIconContainer = styled.div`
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #a67dff 0%, #7e57c2 100%);
+
   flex-shrink: 0;
   i {
     color: white;

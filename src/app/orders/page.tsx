@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Orders from '@/components/lists/orders';
 import useIsMobile from '@/hooks/useIsMobile';
 import Header from '@/components/header';
 import OrdersFilter from '@/components/filters/orders';
-import { Cd } from '@/types/index';
+import { CnD } from '@/types/index';
 import { useAuthContext } from '@/contexts/AuthContext';
 import {
   PaymentBreadcrumb,
@@ -26,33 +26,51 @@ import { usePaymentsQuery } from '../../hooks/usePaymentQuery';
 import LoadingComponent from '@/components/loading';
 
 export default function OrdersPage() {
-  const [paymentTypes, setPaymentTypes] = useState<Cd[]>([]);
-  const [status, setStatus] = useState<Cd[]>([]);
-  const [periods, setPeriods] = useState<Cd[]>([]);
-  const [paymentTypeActive, setPaymentTypeActive] = useState<Cd>();
-  const [statusActive, setStatusActive] = useState<Cd>();
-  const [periodActive, setPeriodActive] = useState<Cd>();
+  const [paymentTypes, setPaymentTypes] = useState<CnD[]>([]);
+  const [status, setStatus] = useState<CnD[]>([]);
+  const [periods, setPeriods] = useState<CnD[]>([]);
+  const [paymentTypeActive, setPaymentTypeActive] = useState<CnD>();
+  const [statusActive, setStatusActive] = useState<CnD>();
+  const [periodActive, setPeriodActive] = useState<CnD>();
   const isMobile = useIsMobile();
   const [visible, setVisible] = useState(false);
-  const { token } = useAuthContext();
-  const [date, setDate] = React.useState<Date[] | undefined>();
+  const { token, checkRequestError } = useAuthContext();
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
 
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const initialized = useRef(false);
 
+  const filters = useMemo(
+    () => ({
+      period: periodActive?.code,
+      type: paymentTypeActive?.code,
+      status: statusActive?.code,
+      start: startDate?.toISOString().split('T')[0],
+      end: endDate?.toISOString().split('T')[0],
+    }),
+    [periodActive, paymentTypeActive, statusActive, startDate, endDate],
+  );
+
+  const [activeFilters, setActiveFilters] = useState(filters);
+
   const {
     data: order,
     isLoading,
-    isError,
+    error,
   } = usePaymentsQuery({
     token,
     page: Math.floor(first / rows) + 1,
-    status: statusActive?.code,
-    type: paymentTypeActive?.code,
-    startDate: date?.[0]?.toISOString().split('T')[0],
-    endDate: date?.[1]?.toISOString().split('T')[0],
+    status: activeFilters.status,
+    type: activeFilters.type,
+    startDate: activeFilters.start,
+    endDate: activeFilters.end,
   });
+
+  useEffect(() => {
+    checkRequestError(error);
+  }, [error, checkRequestError]);
 
   useEffect(() => {
     if (
@@ -78,14 +96,34 @@ export default function OrdersPage() {
       const endDate = new Date(today);
       endDate.setDate(today.getDate() + days);
 
-      setDate([startDate, endDate]);
+      setStartDate(startDate);
+      setEndDate(endDate);
+    } else {
+      setStartDate(undefined);
+      setEndDate(undefined);
     }
   }, [periodActive]);
+
+  useEffect(() => {
+    if (
+      (filters.start && !filters.end) ||
+      (!filters.start && filters.end) ||
+      (isMobile && visible)
+    ) {
+      return;
+    }
+    if (JSON.stringify(filters) !== JSON.stringify(activeFilters)) {
+      setFirst(0);
+      setActiveFilters(filters);
+    }
+  }, [filters, activeFilters, isMobile, visible]);
 
   const onPageChange = async event => {
     setFirst(event.first);
     setRows(event.rows);
   };
+
+  if (!token || isLoading) return <LoadingComponent />;
 
   if (visible) {
     return (
@@ -100,14 +138,13 @@ export default function OrdersPage() {
         periodActive={periodActive}
         setPeriodActive={setPeriodActive}
         setVisible={setVisible}
-        date={date}
-        setDate={setDate}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
       ></OrdersFilter>
     );
   }
-
-  if (isLoading) return <LoadingComponent />;
-  if (isError) return <div>Erro ao carregar pedidos.</div>;
 
   return (
     <PaymentContainer>
@@ -120,7 +157,7 @@ export default function OrdersPage() {
           <i>i</i>
         </ToastInfoIcon>
         <ToastInfoText>
-          Boletos pagos podem demorar até 3 dias para serem atualizados
+          Pagamentos podem demorar até 3 dias para serem atualizados
         </ToastInfoText>
       </ToastContainer>
 
@@ -152,8 +189,10 @@ export default function OrdersPage() {
               periodActive={periodActive}
               setPeriodActive={setPeriodActive}
               setVisible={setVisible}
-              date={date}
-              setDate={setDate}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
             />
           )}
         </PaymentFilterContainer>
@@ -178,6 +217,7 @@ export default function OrdersPage() {
               rows={rows}
               totalRecords={order.totalElements}
               onPageChange={onPageChange}
+              pageLinkSize={isMobile ? 3 : 5}
             />
           )}
         </div>

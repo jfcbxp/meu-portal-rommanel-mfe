@@ -7,11 +7,12 @@ import theme from '@/styles/theme';
 import { AuthProvider } from '../providers/AuthProvider';
 import StyledComponentsRegistry from 'src/lib/registry';
 import useIsMobile from '@/hooks/useIsMobile';
-import 'primereact/resources/themes/lara-light-purple/theme.css';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useRef } from 'react';
-import PrimeReactProvider from '../providers/PrimeReactProvider';
+import PrimeProvider from '../providers/PrimeProvider';
+import 'primereact/resources/primereact.min.css';
+import 'primereact/resources/themes/lara-light-purple/theme.css';
+import 'primeicons/primeicons.css';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -36,7 +37,7 @@ export default function RootLayout({
         style={{ marginInline: !isMobile ? '15vw' : undefined }}
       >
         <AuthProvider>
-          <PrimeReactProvider>
+          <PrimeProvider>
             <StyledComponentsRegistry>
               <ThemeProvider theme={theme}>
                 <GlobalStyle />
@@ -45,7 +46,7 @@ export default function RootLayout({
                 </QueryClientProvider>
               </ThemeProvider>
             </StyledComponentsRegistry>
-          </PrimeReactProvider>
+          </PrimeProvider>
         </AuthProvider>
       </body>
     </html>

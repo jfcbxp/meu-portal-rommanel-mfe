@@ -1,14 +1,14 @@
 import OrderContent from '@/components/order';
 
-export interface Cd {
+export interface CnD {
   code: string;
   description: string;
 }
 
 export interface Order {
-  days: Cd[];
-  types: Cd[];
-  status: Cd[];
+  days: CnD[];
+  types: CnD[];
+  status: CnD[];
   content: GroupedOrders[];
   elements: number;
   totalElements: number;
@@ -28,7 +28,9 @@ export interface OrderContent {
   branchDescription: string;
   document: string;
   version: string;
+  installment: string;
   type: string;
+  typeDescription: string;
   barcode: string;
   digcode: string;
   date: string;

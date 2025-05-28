@@ -18,7 +18,7 @@ import {
 import { useAuthContext } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
-  const [cpf, setCpf] = useState('07256507291');
+  const [cpf, setCpf] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { token, setToken } = useAuthContext();
   const router = useRouter();

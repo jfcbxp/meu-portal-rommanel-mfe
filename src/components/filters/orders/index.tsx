@@ -4,7 +4,7 @@ import FullScreenModal from '@/components/modals/fullscreen';
 import Button from '@/components/buttons/button';
 import useIsMobile from '@/hooks/useIsMobile';
 import React from 'react';
-import { Cd } from '@/types/index';
+import { CnD } from '@/types/index';
 import DateInput from '@/components/inputs/date';
 import {
   ButtonsContainer,
@@ -15,18 +15,20 @@ import {
 } from './styles';
 
 interface OrdersFilterProps {
-  periods?: Cd[];
-  paymentTypes?: Cd[];
-  status?: Cd[];
+  periods?: CnD[];
+  paymentTypes?: CnD[];
+  status?: CnD[];
   setVisible: (visible: boolean) => void;
-  paymentTypeActive?: Cd;
-  setPaymentTypeActive: (paymentType: Cd) => void;
-  statusActive?: Cd;
-  setStatusActive: (status: Cd) => void;
-  periodActive?: Cd;
-  setPeriodActive: (period: Cd) => void;
-  date?: Date[];
-  setDate?: (date: Date[]) => void;
+  paymentTypeActive?: CnD;
+  setPaymentTypeActive: (paymentType: CnD) => void;
+  statusActive?: CnD;
+  setStatusActive: (status: CnD) => void;
+  periodActive?: CnD;
+  setPeriodActive: (period: CnD) => void;
+  startDate?: Date;
+  setStartDate?: (date: Date) => void;
+  endDate?: Date;
+  setEndDate?: (date: Date) => void;
 }
 
 export default function OrdersFilter({
@@ -40,8 +42,10 @@ export default function OrdersFilter({
   setStatusActive,
   periodActive,
   setPeriodActive,
-  date,
-  setDate,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
 }: Readonly<OrdersFilterProps>) {
   const isMobile = useIsMobile();
 
@@ -87,24 +91,38 @@ export default function OrdersFilter({
                 key={period.code}
                 label={period.description}
                 $active={periodActive === period}
-                onClick={() => setPeriodActive(period)}
+                onClick={() =>
+                  periodActive?.code === period.code
+                    ? setPeriodActive(undefined)
+                    : setPeriodActive(period)
+                }
               />
             ))}
           </ButtonsContainer>
 
-          <DateInput
-            value={date ?? []}
-            onChange={e => setDate(e.value)}
-            onFocus={() => setDate(undefined)}
-          />
+          <ButtonsContainer style={{ flexWrap: 'nowrap' }}>
+            <DateInput
+              value={startDate}
+              onChange={e => setStartDate(e.value)}
+              onFocus={() => setStartDate(undefined)}
+            />
+            <DateInput
+              value={endDate}
+              onChange={e => setEndDate(e.value)}
+              onFocus={() => setEndDate(undefined)}
+            />
+          </ButtonsContainer>
+
           <FooterContainer>
             <ClearButton
               label="Limpar"
               icon="pi pi-times"
               onClick={() => {
-                setPaymentTypeActive(paymentTypes[0]);
-                setPeriodActive(periods[0]);
-                setVisible(false);
+                setPaymentTypeActive(undefined);
+                setPeriodActive(undefined);
+                setStatusActive(undefined);
+                setStartDate(undefined);
+                setEndDate(undefined);
               }}
             />
             <Button label="Aplicar" onClick={() => setVisible(false)} />
@@ -152,15 +170,27 @@ export default function OrdersFilter({
               key={period.code}
               label={period.description}
               $active={periodActive === period}
-              onClick={() => setPeriodActive(period)}
+              onClick={() =>
+                periodActive?.code === period.code
+                  ? setPeriodActive(undefined)
+                  : setPeriodActive(period)
+              }
             />
           ))}
         </ButtonsContainer>
-        <DateInput
-          value={date ?? []}
-          onChange={e => setDate(e.value)}
-          onFocus={() => setDate(undefined)}
-        />
+
+        <ButtonsContainer style={{ flexWrap: 'nowrap' }}>
+          <DateInput
+            value={startDate}
+            onChange={e => setStartDate(e.value)}
+            onFocus={() => setStartDate(undefined)}
+          />
+          <DateInput
+            value={endDate}
+            onChange={e => setEndDate(e.value)}
+            onFocus={() => setEndDate(undefined)}
+          />
+        </ButtonsContainer>
       </Container>
     );
   }

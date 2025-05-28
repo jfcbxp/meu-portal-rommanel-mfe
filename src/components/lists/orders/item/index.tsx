@@ -6,13 +6,8 @@ import useIsMobile from '@/hooks/useIsMobile';
 import { OrderContent } from '@/types/index';
 import toBRL from '@/utils/toBRL';
 import { Image } from 'primereact/image';
-import React, { useState } from 'react';
-import {
-  FaChevronRight,
-  FaChevronUp,
-  FaChevronDown,
-  FaBarcode,
-} from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { FaChevronRight, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import {
   CardAmount,
   CardBody,
@@ -37,9 +32,13 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
   const isOpen = properties.orderId === properties.order.id;
   const [visible, setVisible] = useState(false);
-  const { token } = useAuthContext();
+  const { token, checkRequestError } = useAuthContext();
 
-  const { data: orderItems, isError } = useOrderItemsQuery({
+  const {
+    data: orderItems,
+    isError,
+    error,
+  } = useOrderItemsQuery({
     token,
     branch: properties.order.branch,
     document: properties.order.document,
@@ -84,6 +83,10 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
     );
   }
 
+  useEffect(() => {
+    checkRequestError(error);
+  }, [error, checkRequestError]);
+
   if (visible) {
     return (
       <OrderDetails
@@ -97,24 +100,34 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   return (
     <CardContainer key={properties.order.id}>
       <CardHeader>
-        <CardSubtitle>{`nº ${properties.order.document}`}</CardSubtitle>
+        <CardSubtitle>{`nº ${
+          properties.order.document +
+          ' - Parcela: ' +
+          properties.order.installment
+        }`}</CardSubtitle>
         <StatusChip status={properties.order.status} />
       </CardHeader>
       <CardBody>
         <CardIconContainer>
-          {properties.order.image ? (
-            <Image alt="image" src={properties.order.image} />
-          ) : (
-            <FaBarcode color="white" />
-          )}
+          <Image
+            alt="image"
+            width={isMobile ? '48' : '56'}
+            height={isMobile ? '48' : '56'}
+            src={
+              properties.order.image ? properties.order.image : 'no-image.png'
+            }
+            onError={e => {
+              (e.target as HTMLImageElement).src = 'no-image.png';
+            }}
+          />
         </CardIconContainer>
         <CardInfoContainer>
-          <CardTitle>{properties.order.product}</CardTitle>
+          <CardTitle>{properties.order.typeDescription}</CardTitle>
           <CardValueContainer>
             <CardAmount>{`${toBRL(properties.order.amount)}`}</CardAmount>
             <CardItemCount>
               {properties.order.quantity == 0
-                ? `Em negociação`
+                ? `Avulso`
                 : (() => {
                     const plural = properties.order.quantity > 1 ? 's' : '';
                     return `${properties.order.quantity} item${plural}`;
@@ -122,6 +135,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
             </CardItemCount>
           </CardValueContainer>
         </CardInfoContainer>
+
         {ChevronIcon}
       </CardBody>
       {isOpen && (
