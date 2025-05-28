@@ -157,7 +157,7 @@ export default function OrdersPage() {
           <i>i</i>
         </ToastInfoIcon>
         <ToastInfoText>
-          Boletos pagos podem demorar até 3 dias para serem atualizados
+          Pagamentos podem demorar até 3 dias para serem atualizados
         </ToastInfoText>
       </ToastContainer>
 
@@ -217,6 +217,7 @@ export default function OrdersPage() {
               rows={rows}
               totalRecords={order.totalElements}
               onPageChange={onPageChange}
+              pageLinkSize={isMobile ? 3 : 5}
             />
           )}
         </div>

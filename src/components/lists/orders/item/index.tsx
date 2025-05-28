@@ -7,12 +7,7 @@ import { OrderContent } from '@/types/index';
 import toBRL from '@/utils/toBRL';
 import { Image } from 'primereact/image';
 import React, { useEffect, useState } from 'react';
-import {
-  FaChevronRight,
-  FaChevronUp,
-  FaChevronDown,
-  FaBarcode,
-} from 'react-icons/fa';
+import { FaChevronRight, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import {
   CardAmount,
   CardBody,

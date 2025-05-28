@@ -89,15 +89,13 @@ export default function OrderContentComponent({
             switch (order.type) {
               case 'BOL':
                 return <FaBarcode size={24} />;
-              case 'CreditCard':
-                return <FaRegCreditCard size={24} />;
-              case 'Pix':
+              case 'NP':
                 return <FaQrcode size={24} />;
               default:
                 return <FaMoneyBill size={24} />;
             }
           })()}
-          <span>{order.type}</span>
+          <span>{order.typeDescription}</span>
         </PaymentMethodRow>
       </PaymentMethodContainer>
 
