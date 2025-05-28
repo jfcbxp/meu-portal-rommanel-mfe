@@ -101,7 +101,9 @@ export default function OrderContentComponent({
 
       <Button
         icon={<FaClipboard size={24} style={{ marginRight: '0.5rem' }} />}
-        label="Copiar Código de Barras"
+        label={
+          order.type == 'BOL' ? 'Copiar Código de Barras' : 'Copiar Código Pix'
+        }
         disabled={!order.barcode}
         onClick={handleCopy}
       />
