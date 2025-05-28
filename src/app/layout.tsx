@@ -8,7 +8,7 @@ import { AuthProvider } from '../providers/AuthProvider';
 import StyledComponentsRegistry from 'src/lib/registry';
 import useIsMobile from '@/hooks/useIsMobile';
 import 'primereact/resources/themes/lara-light-purple/theme.css';
-
+import 'primeicons/primeicons.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useRef } from 'react';
 import PrimeReactProvider from '../providers/PrimeReactProvider';

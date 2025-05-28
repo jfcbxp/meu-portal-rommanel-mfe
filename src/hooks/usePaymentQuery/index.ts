@@ -9,6 +9,7 @@ export function usePaymentsQuery({
   type,
   startDate,
   endDate,
+  enabled = true,
 }: {
   token: string;
   page: number;
@@ -16,6 +17,7 @@ export function usePaymentsQuery({
   type?: string;
   startDate?: string;
   endDate?: string;
+  enabled?: boolean;
 }) {
   return useQuery<Order, Error>({
     queryKey: ['payments', token, page, status, type, startDate, endDate],
@@ -33,7 +35,7 @@ export function usePaymentsQuery({
       }
       return result;
     },
-    enabled: !!token,
+    enabled: enabled && !!token,
     staleTime: 1000 * 60 * 60,
     refetchOnWindowFocus: false,
   });

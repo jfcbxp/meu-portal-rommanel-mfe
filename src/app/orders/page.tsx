@@ -6,7 +6,7 @@ import Orders from '@/components/lists/orders';
 import useIsMobile from '@/hooks/useIsMobile';
 import Header from '@/components/header';
 import OrdersFilter from '@/components/filters/orders';
-import { Cd } from '@/types/index';
+import { CnD } from '@/types/index';
 import { useAuthContext } from '@/contexts/AuthContext';
 import {
   PaymentBreadcrumb,
@@ -26,20 +26,27 @@ import { usePaymentsQuery } from '../../hooks/usePaymentQuery';
 import LoadingComponent from '@/components/loading';
 
 export default function OrdersPage() {
-  const [paymentTypes, setPaymentTypes] = useState<Cd[]>([]);
-  const [status, setStatus] = useState<Cd[]>([]);
-  const [periods, setPeriods] = useState<Cd[]>([]);
-  const [paymentTypeActive, setPaymentTypeActive] = useState<Cd>();
-  const [statusActive, setStatusActive] = useState<Cd>();
-  const [periodActive, setPeriodActive] = useState<Cd>();
+  const [paymentTypes, setPaymentTypes] = useState<CnD[]>([]);
+  const [status, setStatus] = useState<CnD[]>([]);
+  const [periods, setPeriods] = useState<CnD[]>([]);
+  const [paymentTypeActive, setPaymentTypeActive] = useState<CnD>();
+  const [statusActive, setStatusActive] = useState<CnD>();
+  const [periodActive, setPeriodActive] = useState<CnD>();
   const isMobile = useIsMobile();
   const [visible, setVisible] = useState(false);
   const { token, checkRequestError } = useAuthContext();
-  const [date, setDate] = React.useState<Date[] | undefined>();
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
 
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const initialized = useRef(false);
+
+  const hasDates = () => {
+    if ((startDate && !endDate) || (!startDate && endDate)) return false;
+    if (isMobile && visible) return false;
+    return true;
+  };
 
   const {
     data: order,
@@ -51,8 +58,9 @@ export default function OrdersPage() {
     page: Math.floor(first / rows) + 1,
     status: statusActive?.code,
     type: paymentTypeActive?.code,
-    startDate: date?.[0]?.toISOString().split('T')[0],
-    endDate: date?.[1]?.toISOString().split('T')[0],
+    startDate: startDate?.toISOString().split('T')[0],
+    endDate: endDate?.toISOString().split('T')[0],
+    enabled: hasDates(),
   });
 
   useEffect(() => {
@@ -83,9 +91,18 @@ export default function OrdersPage() {
       const endDate = new Date(today);
       endDate.setDate(today.getDate() + days);
 
-      setDate([startDate, endDate]);
+      setStartDate(startDate);
+      setEndDate(endDate);
+    } else {
+      setStartDate(undefined);
+      setEndDate(undefined);
     }
   }, [periodActive]);
+
+  useEffect(() => {
+    setFirst(0);
+    setRows(10);
+  }, [periodActive, paymentTypeActive, statusActive, endDate, startDate]);
 
   const onPageChange = async event => {
     setFirst(event.first);
@@ -105,8 +122,10 @@ export default function OrdersPage() {
         periodActive={periodActive}
         setPeriodActive={setPeriodActive}
         setVisible={setVisible}
-        date={date}
-        setDate={setDate}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
       ></OrdersFilter>
     );
   }
@@ -157,8 +176,10 @@ export default function OrdersPage() {
               periodActive={periodActive}
               setPeriodActive={setPeriodActive}
               setVisible={setVisible}
-              date={date}
-              setDate={setDate}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
             />
           )}
         </PaymentFilterContainer>

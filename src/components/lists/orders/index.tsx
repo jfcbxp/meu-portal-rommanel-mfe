@@ -1,4 +1,4 @@
-import { Cd, GroupedOrders } from '@/types/index';
+import { CnD, GroupedOrders } from '@/types/index';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -8,8 +8,8 @@ import theme from '@/styles/theme';
 import { DateHeader } from './styles';
 
 interface Properties {
-  paymentTypeActive: Cd;
-  periodActive: Cd;
+  paymentTypeActive: CnD;
+  periodActive: CnD;
   orders?: GroupedOrders[];
   loading?: boolean;
 }

@@ -15,8 +15,8 @@ export const fetchPayments = async (
     );
     const params: Record<string, string> = {};
     if (startDate && endDate) {
-      params.dateStart = startDate;
-      params.dateEnd = endDate;
+      params.startDate = startDate;
+      params.endDate = endDate;
     }
     if (type) {
       params.type = type;

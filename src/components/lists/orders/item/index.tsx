@@ -105,7 +105,9 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   return (
     <CardContainer key={properties.order.id}>
       <CardHeader>
-        <CardSubtitle>{`nº ${properties.order.document}`}</CardSubtitle>
+        <CardSubtitle>{`nº ${
+          properties.order.document + ' - ' + properties.order.installment
+        }`}</CardSubtitle>
         <StatusChip status={properties.order.status} />
       </CardHeader>
       <CardBody>
