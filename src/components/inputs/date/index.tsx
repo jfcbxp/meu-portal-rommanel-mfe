@@ -53,11 +53,10 @@ export default function DateInput(
   return (
     <StyledCalendar
       {...properties}
-      placeholder="DD/MM/YYYY"
+      placeholder="Escolha um dia"
       dateFormat="dd/mm/yy"
       selectionMode="single"
       showIcon
-      icon={<i className="pi pi-clock" />}
       readOnlyInput
       hideOnRangeSelection
       showButtonBar

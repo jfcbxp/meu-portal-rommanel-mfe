@@ -6,8 +6,8 @@ export async function GET(req: NextRequest) {
   const page = searchParams.get('page');
   const status = searchParams.get('status');
   const type = searchParams.get('type');
-  const dateStart = searchParams.get('dateStart');
-  const dateEnd = searchParams.get('dateEnd');
+  const startDate = searchParams.get('startDate');
+  const endDate = searchParams.get('endDate');
   const token = req.headers.get('authorization');
   const apiBaseUrl = process.env.API_BASE_URL || '';
 
@@ -15,8 +15,8 @@ export async function GET(req: NextRequest) {
   if (page) backendUrl.searchParams.append('page', page);
   if (status) backendUrl.searchParams.append('status', status);
   if (type) backendUrl.searchParams.append('type', type);
-  if (dateStart) backendUrl.searchParams.append('dateStart', dateStart);
-  if (dateEnd) backendUrl.searchParams.append('dateEnd', dateEnd);
+  if (startDate) backendUrl.searchParams.append('startDate', startDate);
+  if (endDate) backendUrl.searchParams.append('endDate', endDate);
 
   const response = await fetch(backendUrl.toString(), {
     headers: {
