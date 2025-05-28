@@ -65,7 +65,7 @@ export default function OrderContentComponent({
   return (
     <Container>
       <OrderInfoContainer>
-        <OrderNumber>{`Boleto nº ${order.document}`}</OrderNumber>
+        <OrderNumber>{`Valor referente a parcela nº ${order.installment}`}</OrderNumber>
         <OrderValue>{`${toBRL(order.amount)}`}</OrderValue>
         <DetailsRow>
           <DetailItem>

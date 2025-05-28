@@ -106,7 +106,9 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
     <CardContainer key={properties.order.id}>
       <CardHeader>
         <CardSubtitle>{`nº ${
-          properties.order.document + ' - ' + properties.order.installment
+          properties.order.document +
+          ' - Parcela: ' +
+          properties.order.installment
         }`}</CardSubtitle>
         <StatusChip status={properties.order.status} />
       </CardHeader>
@@ -125,12 +127,12 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
           />
         </CardIconContainer>
         <CardInfoContainer>
-          <CardTitle>{properties.order.product}</CardTitle>
+          <CardTitle>{properties.order.typeDescription}</CardTitle>
           <CardValueContainer>
             <CardAmount>{`${toBRL(properties.order.amount)}`}</CardAmount>
             <CardItemCount>
               {properties.order.quantity == 0
-                ? `Em negociação`
+                ? `Avulso`
                 : (() => {
                     const plural = properties.order.quantity > 1 ? 's' : '';
                     return `${properties.order.quantity} item${plural}`;
@@ -138,6 +140,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
             </CardItemCount>
           </CardValueContainer>
         </CardInfoContainer>
+
         {ChevronIcon}
       </CardBody>
       {isOpen && (

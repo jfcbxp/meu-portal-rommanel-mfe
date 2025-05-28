@@ -30,6 +30,7 @@ export interface OrderContent {
   version: string;
   installment: string;
   type: string;
+  typeDescription: string;
   barcode: string;
   digcode: string;
   date: string;
