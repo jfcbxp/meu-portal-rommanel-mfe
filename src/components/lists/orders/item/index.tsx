@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { FaChevronRight, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import {
   CardAmount,
+  CardBalance,
   CardBody,
   CardContainer,
   CardHeader,
@@ -124,7 +125,14 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
         <CardInfoContainer>
           <CardTitle>{properties.order.typeDescription}</CardTitle>
           <CardValueContainer>
-            <CardAmount>{`${toBRL(properties.order.amount)}`}</CardAmount>
+            <CardBalance>{`${toBRL(
+              properties.order.balance > 0
+                ? properties.order.balance
+                : properties.order.amount,
+            )}`}</CardBalance>
+            {properties.order.status === 'Pago Parcialmente' && (
+              <CardAmount>{`${toBRL(properties.order.amount)}`}</CardAmount>
+            )}
             <CardItemCount>
               {properties.order.quantity == 0
                 ? `Avulso`

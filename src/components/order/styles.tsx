@@ -16,11 +16,20 @@ export const OrderNumber = styled.p`
   margin: 0 0 ${({ theme }) => theme.spacing.small};
 `;
 
-export const OrderValue = styled.p`
+export const OrderBalance = styled.p`
   font-size: 1.5rem;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 ${({ theme }) => theme.spacing.medium};
+`;
+
+export const OrderAmount = styled.p`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.textLight};
+  margin: 0 0 ${({ theme }) => theme.spacing.medium};
+  font-style: italic;
+  text-decoration: line-through;
 `;
 
 export const DetailsRow = styled.div`

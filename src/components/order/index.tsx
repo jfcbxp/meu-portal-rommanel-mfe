@@ -3,13 +3,7 @@ import { OrderContent } from '@/types/index';
 import StatusChip from '../labels/statusChip';
 import OrderItems from '../lists/orders/items';
 import Button from '../buttons/button';
-import {
-  FaBarcode,
-  FaClipboard,
-  FaMoneyBill,
-  FaQrcode,
-  FaRegCreditCard,
-} from 'react-icons/fa';
+import { FaBarcode, FaClipboard, FaMoneyBill, FaQrcode } from 'react-icons/fa';
 import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import toBRL from '@/utils/toBRL';
@@ -18,9 +12,10 @@ import {
   DetailItem,
   DetailItemRight,
   DetailsRow,
+  OrderAmount,
+  OrderBalance,
   OrderInfoContainer,
   OrderNumber,
-  OrderValue,
   PaymentMethodContainer,
   PaymentMethodRow,
   SectionTitle,
@@ -66,7 +61,12 @@ export default function OrderContentComponent({
     <Container>
       <OrderInfoContainer>
         <OrderNumber>{`Valor referente a parcela nº ${order.installment}`}</OrderNumber>
-        <OrderValue>{`${toBRL(order.amount)}`}</OrderValue>
+        <OrderBalance>{`${toBRL(
+          order.balance > 0 ? order.balance : order.amount,
+        )}`}</OrderBalance>
+        {order.status === 'Pago Parcialmente' && (
+          <OrderAmount>{`${toBRL(order.amount)}`}</OrderAmount>
+        )}
         <DetailsRow>
           <DetailItem>
             <p>Quantidade</p>

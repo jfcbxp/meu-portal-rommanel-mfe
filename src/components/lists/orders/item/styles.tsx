@@ -77,6 +77,15 @@ export const CardValueContainer = styled.div`
 export const CardAmount = styled.span`
   font-size: 0.875rem;
   font-weight: bolder;
+  color: ${({ theme }) => theme.colors.textLight};
+  margin-bottom: 4px;
+  font-style: italic;
+  text-decoration: line-through;
+`;
+
+export const CardBalance = styled.span`
+  font-size: 0.875rem;
+  font-weight: bolder;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 4px;
 `;
