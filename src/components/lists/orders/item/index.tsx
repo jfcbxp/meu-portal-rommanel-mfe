@@ -22,6 +22,7 @@ import {
   CardValueContainer,
 } from './styles';
 import { useOrderItemsQuery } from '@/hooks/useOrderItemQuery';
+import useIsOpened from '@/hooks/useIsOpened';
 
 interface Properties {
   order: OrderContent;
@@ -31,7 +32,7 @@ interface Properties {
 
 export default function OrderItemComponent(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
-  const isOpen = properties.orderId === properties.order.id;
+  const isOpened = useIsOpened(properties.orderId === properties.order.id);
   const [visible, setVisible] = useState(false);
   const { token, checkRequestError } = useAuthContext();
 
@@ -44,7 +45,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
     branch: properties.order.branch,
     document: properties.order.document,
     version: properties.order.version,
-    enabled: (visible || isOpen) && properties.order.quantity > 0,
+    enabled: (visible || isOpened) && properties.order.quantity > 0,
   });
 
   const handleCardClick = (id: number) => {
@@ -52,7 +53,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
       setVisible(true);
     } else {
       setVisible(false);
-      if (isOpen) {
+      if (isOpened) {
         properties.setOrderId(undefined);
       } else {
         properties.setOrderId(id);
@@ -68,7 +69,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
         style={{ cursor: 'pointer' }}
       />
     );
-  } else if (isOpen) {
+  } else if (isOpened) {
     ChevronIcon = (
       <FaChevronUp
         onClick={() => handleCardClick(properties.order.id)}
@@ -146,7 +147,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
 
         {ChevronIcon}
       </CardBody>
-      {isOpen && (
+      {isOpened && (
         <div style={{ width: '100%' }}>
           {isError && <div>Erro ao carregar itens do pedido.</div>}
           <OrderContentComponent order={properties.order} items={orderItems} />
