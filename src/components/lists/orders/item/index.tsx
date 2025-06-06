@@ -22,17 +22,18 @@ import {
   CardValueContainer,
 } from './styles';
 import { useOrderItemsQuery } from '@/hooks/useOrderItemQuery';
-import useIsOpened from '@/hooks/useIsOpened';
 
 interface Properties {
   order: OrderContent;
   orderId: number;
   setOrderId: (orderId: number) => void;
+  showPaginator: boolean;
+  setShowPaginator: (show: boolean) => void;
 }
 
 export default function OrderItemComponent(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
-  const isOpened = useIsOpened(properties.orderId === properties.order.id);
+  const isOpened = properties.orderId === properties.order.id;
   const [visible, setVisible] = useState(false);
   const { token, checkRequestError } = useAuthContext();
 
@@ -51,8 +52,10 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
   const handleCardClick = (id: number) => {
     if (isMobile) {
       setVisible(true);
+      properties.setShowPaginator(!properties.showPaginator);
     } else {
       setVisible(false);
+      properties.setShowPaginator(true);
       if (isOpened) {
         properties.setOrderId(undefined);
       } else {
@@ -95,6 +98,8 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
         setVisible={setVisible}
         order={properties.order}
         items={orderItems}
+        showPaginator={properties.showPaginator}
+        setShowPaginator={properties.setShowPaginator}
       />
     );
   }

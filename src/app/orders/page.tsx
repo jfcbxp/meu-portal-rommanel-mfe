@@ -24,7 +24,6 @@ import {
 } from './styles';
 import { usePaymentsQuery } from '../../hooks/usePaymentQuery';
 import LoadingComponent from '@/components/loading';
-import useIsOpened from '@/hooks/useIsOpened';
 
 export default function OrdersPage() {
   const [paymentTypes, setPaymentTypes] = useState<CnD[]>([]);
@@ -34,7 +33,7 @@ export default function OrdersPage() {
   const [statusActive, setStatusActive] = useState<CnD>();
   const [periodActive, setPeriodActive] = useState<CnD>();
   const isMobile = useIsMobile();
-  const isOpened = useIsOpened();
+  const [showPaginator, setShowPaginator] = useState(true);
   const [visible, setVisible] = useState(false);
   const { token, checkRequestError } = useAuthContext();
   const [startDate, setStartDate] = useState<Date>();
@@ -150,7 +149,10 @@ export default function OrdersPage() {
 
   return (
     <PaymentContainer>
-      <Header></Header>
+      <Header
+        showPaginator={showPaginator}
+        setShowPaginator={setShowPaginator}
+      ></Header>
 
       <PaymentBreadcrumb>Início / Meus Pagamentos</PaymentBreadcrumb>
 
@@ -210,10 +212,12 @@ export default function OrdersPage() {
               paymentTypeActive={paymentTypeActive}
               periodActive={periodActive}
               orders={order.content}
+              showPaginator={showPaginator}
+              setShowPaginator={setShowPaginator}
             />
           )}
 
-          {token && order && !(isMobile && isOpened) && (
+          {token && order && showPaginator && (
             <PaymentPaginator
               first={first}
               rows={rows}

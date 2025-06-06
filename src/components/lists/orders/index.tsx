@@ -12,6 +12,8 @@ interface Properties {
   periodActive: CnD;
   orders?: GroupedOrders[];
   loading?: boolean;
+  showPaginator: boolean;
+  setShowPaginator: (show: boolean) => void;
 }
 
 export default function Orders(properties: Readonly<Properties>) {
@@ -53,6 +55,8 @@ export default function Orders(properties: Readonly<Properties>) {
                 order={order}
                 orderId={orderId}
                 setOrderId={setOrderId}
+                showPaginator={properties.showPaginator}
+                setShowPaginator={properties.setShowPaginator}
               />
             ))}
           </div>
