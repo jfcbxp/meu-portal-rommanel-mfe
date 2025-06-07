@@ -29,72 +29,64 @@ interface OrdersFilterProps {
   setStartDate?: (date: Date) => void;
   endDate?: Date;
   setEndDate?: (date: Date) => void;
+  showPaginator: boolean;
+  setShowPaginator: (show: boolean) => void;
 }
 
-export default function OrdersFilter({
-  periods,
-  paymentTypes,
-  status,
-  setVisible,
-  paymentTypeActive,
-  setPaymentTypeActive,
-  statusActive,
-  setStatusActive,
-  periodActive,
-  setPeriodActive,
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
-}: Readonly<OrdersFilterProps>) {
+export default function OrdersFilter(properties: Readonly<OrdersFilterProps>) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
     return (
       <FullScreenModal>
-        <Header title="Filtrar" onClick={() => setVisible(false)} />
+        <Header
+          showPaginator={properties.showPaginator}
+          setShowPaginator={properties.setShowPaginator}
+          title="Filtrar"
+          onClick={() => properties.setVisible(false)}
+        />
         <Container>
           <h5>Tipo</h5>
           <ButtonsContainer>
-            {paymentTypes?.map(paymentType => (
+            {properties.paymentTypes?.map(paymentType => (
               <FilterButton
                 key={paymentType.code}
                 label={paymentType.description}
-                $active={paymentTypeActive === paymentType}
+                $active={properties.paymentTypeActive === paymentType}
                 onClick={() =>
-                  paymentTypeActive?.code === paymentType.code
-                    ? setPaymentTypeActive(undefined)
-                    : setPaymentTypeActive(paymentType)
+                  properties.paymentTypeActive?.code === paymentType.code
+                    ? properties.setPaymentTypeActive(undefined)
+                    : properties.setPaymentTypeActive(paymentType)
                 }
               />
             ))}
           </ButtonsContainer>
           <h5>Situação</h5>
           <ButtonsContainer>
-            {status?.map(item => (
+            {properties.status?.map(item => (
               <FilterButton
                 key={item.code}
                 label={item.description}
-                $active={statusActive === item}
+                $active={properties.statusActive === item}
                 onClick={() =>
-                  statusActive?.code === item.code
-                    ? setStatusActive(undefined)
-                    : setStatusActive(item)
+                  properties.statusActive?.code === item.code
+                    ? properties.setStatusActive(undefined)
+                    : properties.setStatusActive(item)
                 }
               />
             ))}
           </ButtonsContainer>
           <h5>Período</h5>
           <ButtonsContainer>
-            {periods?.map(period => (
+            {properties.periods?.map(period => (
               <FilterButton
                 key={period.code}
                 label={period.description}
-                $active={periodActive === period}
+                $active={properties.periodActive === period}
                 onClick={() =>
-                  periodActive?.code === period.code
-                    ? setPeriodActive(undefined)
-                    : setPeriodActive(period)
+                  properties.periodActive?.code === period.code
+                    ? properties.setPeriodActive(undefined)
+                    : properties.setPeriodActive(period)
                 }
               />
             ))}
@@ -102,14 +94,14 @@ export default function OrdersFilter({
 
           <ButtonsContainer style={{ flexWrap: 'nowrap' }}>
             <DateInput
-              value={startDate}
-              onChange={e => setStartDate(e.value)}
-              onFocus={() => setStartDate(undefined)}
+              value={properties.startDate}
+              onChange={e => properties.setStartDate(e.value)}
+              onFocus={() => properties.setStartDate(undefined)}
             />
             <DateInput
-              value={endDate}
-              onChange={e => setEndDate(e.value)}
-              onFocus={() => setEndDate(undefined)}
+              value={properties.endDate}
+              onChange={e => properties.setEndDate(e.value)}
+              onFocus={() => properties.setEndDate(undefined)}
             />
           </ButtonsContainer>
 
@@ -118,14 +110,17 @@ export default function OrdersFilter({
               label="Limpar"
               icon="pi pi-times"
               onClick={() => {
-                setPaymentTypeActive(undefined);
-                setPeriodActive(undefined);
-                setStatusActive(undefined);
-                setStartDate(undefined);
-                setEndDate(undefined);
+                properties.setPaymentTypeActive(undefined);
+                properties.setPeriodActive(undefined);
+                properties.setStatusActive(undefined);
+                properties.setStartDate(undefined);
+                properties.setEndDate(undefined);
               }}
             />
-            <Button label="Aplicar" onClick={() => setVisible(false)} />
+            <Button
+              label="Aplicar"
+              onClick={() => properties.setVisible(false)}
+            />
           </FooterContainer>
         </Container>
       </FullScreenModal>
@@ -135,45 +130,45 @@ export default function OrdersFilter({
       <Container>
         <h5>Tipo</h5>
         <ButtonsContainer>
-          {paymentTypes?.map(paymentType => (
+          {properties.paymentTypes?.map(paymentType => (
             <FilterButton
               key={paymentType.code}
               label={paymentType.description}
-              $active={paymentTypeActive === paymentType}
+              $active={properties.paymentTypeActive === paymentType}
               onClick={() =>
-                paymentTypeActive?.code === paymentType.code
-                  ? setPaymentTypeActive(undefined)
-                  : setPaymentTypeActive(paymentType)
+                properties.paymentTypeActive?.code === paymentType.code
+                  ? properties.setPaymentTypeActive(undefined)
+                  : properties.setPaymentTypeActive(paymentType)
               }
             />
           ))}
         </ButtonsContainer>
         <h5>Situação</h5>
         <ButtonsContainer>
-          {status?.map(item => (
+          {properties.status?.map(item => (
             <FilterButton
               key={item.code}
               label={item.description}
-              $active={statusActive === item}
+              $active={properties.statusActive === item}
               onClick={() =>
-                statusActive?.code === item.code
-                  ? setStatusActive(undefined)
-                  : setStatusActive(item)
+                properties.statusActive?.code === item.code
+                  ? properties.setStatusActive(undefined)
+                  : properties.setStatusActive(item)
               }
             />
           ))}
         </ButtonsContainer>
         <h5>Período</h5>
         <ButtonsContainer>
-          {periods?.map(period => (
+          {properties.periods?.map(period => (
             <FilterButton
               key={period.code}
               label={period.description}
-              $active={periodActive === period}
+              $active={properties.periodActive === period}
               onClick={() =>
-                periodActive?.code === period.code
-                  ? setPeriodActive(undefined)
-                  : setPeriodActive(period)
+                properties.periodActive?.code === period.code
+                  ? properties.setPeriodActive(undefined)
+                  : properties.setPeriodActive(period)
               }
             />
           ))}
@@ -181,14 +176,14 @@ export default function OrdersFilter({
 
         <ButtonsContainer style={{ flexWrap: 'nowrap' }}>
           <DateInput
-            value={startDate}
-            onChange={e => setStartDate(e.value)}
-            onFocus={() => setStartDate(undefined)}
+            value={properties.startDate}
+            onChange={e => properties.setStartDate(e.value)}
+            onFocus={() => properties.setStartDate(undefined)}
           />
           <DateInput
-            value={endDate}
-            onChange={e => setEndDate(e.value)}
-            onFocus={() => setEndDate(undefined)}
+            value={properties.endDate}
+            onChange={e => properties.setEndDate(e.value)}
+            onFocus={() => properties.setEndDate(undefined)}
           />
         </ButtonsContainer>
       </Container>
