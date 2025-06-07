@@ -11,9 +11,11 @@ import { HeaderContainer, HeaderMenu, HeaderTitle } from './styles';
 interface HeaderProps {
   title?: string;
   onClick?: (click: any) => void;
+  showPaginator: boolean;
+  setShowPaginator: (show: boolean) => void;
 }
 
-export default function Header({ title, onClick }: Readonly<HeaderProps>) {
+export default function Header(properties: Readonly<HeaderProps>) {
   const isMobile = useIsMobile();
   const { token, setToken } = useAuthContext();
   const [name, setName] = useState<string>('Usuário');
@@ -24,7 +26,7 @@ export default function Header({ title, onClick }: Readonly<HeaderProps>) {
     }
   }, [token]);
 
-  if (!title) {
+  if (!properties.title) {
     return (
       <HeaderContainer>
         <Image alt="favicon" src={favicon} />
@@ -53,11 +55,16 @@ export default function Header({ title, onClick }: Readonly<HeaderProps>) {
     return (
       <HeaderContainer>
         <span style={{ width: '2.5rem' }}></span> {/* Spacer */}
-        {title && <HeaderTitle>{title}</HeaderTitle>}
+        {properties.title && <HeaderTitle>{properties.title}</HeaderTitle>}
         <FaTimes
           size={24}
           color="purple"
-          onClick={() => onClick && onClick(null)}
+          onClick={() => {
+            if (properties.onClick) {
+              properties.onClick(null);
+            }
+            properties.setShowPaginator(!properties.showPaginator);
+          }}
           style={{ cursor: 'pointer' }}
         />
       </HeaderContainer>
@@ -68,10 +75,10 @@ export default function Header({ title, onClick }: Readonly<HeaderProps>) {
         <FaChevronLeft
           size={24}
           color="purple"
-          onClick={() => onClick && onClick(null)}
+          onClick={() => properties.onClick && properties.onClick(null)}
           style={{ cursor: 'pointer' }}
         />
-        {title && <HeaderTitle>{title}</HeaderTitle>}
+        {properties.title && <HeaderTitle>{properties.title}</HeaderTitle>}
         <span style={{ width: '2.5rem' }}></span> {/* Spacer */}
       </HeaderContainer>
     );

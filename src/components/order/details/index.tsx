@@ -11,19 +11,22 @@ interface OrderDetailContentProps {
   order?: OrderContent;
   setVisible: (visible: boolean) => void;
   items?: OrderContent['items'];
+  showPaginator: boolean;
+  setShowPaginator: (show: boolean) => void;
 }
 
-function OrderDetailContent({
-  order,
-  items,
-  setVisible,
-}: Readonly<OrderDetailContentProps>) {
+function OrderDetailContent(properties: Readonly<OrderDetailContentProps>) {
   const toast = useRef<Toast>(null);
 
-  if (!order) {
+  if (!properties.order) {
     return (
       <FullScreenModal>
-        <Header title="Detalhes do Pagamento" onClick={setVisible} />
+        <Header
+          title="Detalhes do Pagamento"
+          onClick={properties.setVisible}
+          showPaginator={properties.showPaginator}
+          setShowPaginator={properties.setShowPaginator}
+        />
         <Container>
           <p style={{ textAlign: 'center', color: '#666' }}>
             Pagamento não encontrado.
@@ -36,9 +39,17 @@ function OrderDetailContent({
   return (
     <FullScreenModal>
       <Toast ref={toast} />
-      <Header title="Detalhes do Pagamento" onClick={setVisible} />
+      <Header
+        title="Detalhes do Pagamento"
+        onClick={properties.setVisible}
+        showPaginator={properties.showPaginator}
+        setShowPaginator={properties.setShowPaginator}
+      />
 
-      <OrderContentComponent order={order} items={items} />
+      <OrderContentComponent
+        order={properties.order}
+        items={properties.items}
+      />
     </FullScreenModal>
   );
 }
@@ -47,16 +58,20 @@ interface OrderDetailsProps {
   order?: OrderContent;
   items?: OrderContent['items'];
   setVisible: (visible: boolean) => void;
+  showPaginator: boolean;
+  setShowPaginator: (show: boolean) => void;
 }
 
-export default function OrderDetails({
-  order,
-  items,
-  setVisible,
-}: Readonly<OrderDetailsProps>) {
+export default function OrderDetails(properties: Readonly<OrderDetailsProps>) {
   return (
     <Suspense fallback={<p>Carregando...</p>}>
-      <OrderDetailContent order={order} items={items} setVisible={setVisible} />
+      <OrderDetailContent
+        order={properties.order}
+        items={properties.items}
+        setVisible={properties.setVisible}
+        showPaginator={properties.showPaginator}
+        setShowPaginator={properties.setShowPaginator}
+      />
     </Suspense>
   );
 }

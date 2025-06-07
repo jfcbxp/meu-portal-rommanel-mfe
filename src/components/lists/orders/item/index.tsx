@@ -27,11 +27,13 @@ interface Properties {
   order: OrderContent;
   orderId: number;
   setOrderId: (orderId: number) => void;
+  showPaginator: boolean;
+  setShowPaginator: (show: boolean) => void;
 }
 
 export default function OrderItemComponent(properties: Readonly<Properties>) {
   const isMobile = useIsMobile();
-  const isOpen = properties.orderId === properties.order.id;
+  const isOpened = properties.orderId === properties.order.id;
   const [visible, setVisible] = useState(false);
   const { token, checkRequestError } = useAuthContext();
 
@@ -44,15 +46,17 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
     branch: properties.order.branch,
     document: properties.order.document,
     version: properties.order.version,
-    enabled: (visible || isOpen) && properties.order.quantity > 0,
+    enabled: (visible || isOpened) && properties.order.quantity > 0,
   });
 
   const handleCardClick = (id: number) => {
     if (isMobile) {
       setVisible(true);
+      properties.setShowPaginator(!properties.showPaginator);
     } else {
       setVisible(false);
-      if (isOpen) {
+      properties.setShowPaginator(true);
+      if (isOpened) {
         properties.setOrderId(undefined);
       } else {
         properties.setOrderId(id);
@@ -68,7 +72,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
         style={{ cursor: 'pointer' }}
       />
     );
-  } else if (isOpen) {
+  } else if (isOpened) {
     ChevronIcon = (
       <FaChevronUp
         onClick={() => handleCardClick(properties.order.id)}
@@ -94,6 +98,8 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
         setVisible={setVisible}
         order={properties.order}
         items={orderItems}
+        showPaginator={properties.showPaginator}
+        setShowPaginator={properties.setShowPaginator}
       />
     );
   }
@@ -146,7 +152,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
 
         {ChevronIcon}
       </CardBody>
-      {isOpen && (
+      {isOpened && (
         <div style={{ width: '100%' }}>
           {isError && <div>Erro ao carregar itens do pedido.</div>}
           <OrderContentComponent order={properties.order} items={orderItems} />
