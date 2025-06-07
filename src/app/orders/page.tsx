@@ -33,6 +33,7 @@ export default function OrdersPage() {
   const [statusActive, setStatusActive] = useState<CnD>();
   const [periodActive, setPeriodActive] = useState<CnD>();
   const isMobile = useIsMobile();
+  const [showPaginator, setShowPaginator] = useState(true);
   const [visible, setVisible] = useState(false);
   const { token, checkRequestError } = useAuthContext();
   const [startDate, setStartDate] = useState<Date>();
@@ -142,13 +143,18 @@ export default function OrdersPage() {
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
+        showPaginator={showPaginator}
+        setShowPaginator={setShowPaginator}
       ></OrdersFilter>
     );
   }
 
   return (
     <PaymentContainer>
-      <Header></Header>
+      <Header
+        showPaginator={showPaginator}
+        setShowPaginator={setShowPaginator}
+      ></Header>
 
       <PaymentBreadcrumb>Início / Meus Pagamentos</PaymentBreadcrumb>
 
@@ -193,6 +199,8 @@ export default function OrdersPage() {
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
+              showPaginator={showPaginator}
+              setShowPaginator={setShowPaginator}
             />
           )}
         </PaymentFilterContainer>
@@ -208,10 +216,12 @@ export default function OrdersPage() {
               paymentTypeActive={paymentTypeActive}
               periodActive={periodActive}
               orders={order.content}
+              showPaginator={showPaginator}
+              setShowPaginator={setShowPaginator}
             />
           )}
 
-          {token && order && (
+          {token && order && showPaginator && (
             <PaymentPaginator
               first={first}
               rows={rows}
