@@ -143,6 +143,8 @@ export default function OrdersPage() {
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
+        showPaginator={showPaginator}
+        setShowPaginator={setShowPaginator}
       ></OrdersFilter>
     );
   }
@@ -197,6 +199,8 @@ export default function OrdersPage() {
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
+              showPaginator={showPaginator}
+              setShowPaginator={setShowPaginator}
             />
           )}
         </PaymentFilterContainer>
