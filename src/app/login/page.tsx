@@ -16,9 +16,11 @@ import {
   LoginTitle,
 } from './styles';
 import { useAuthContext } from '@/contexts/AuthContext';
+import Password from '@/components/inputs/password';
 
 export default function LoginPage() {
   const [cpf, setCpf] = useState('');
+  const [senha, setSenha] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { token, setToken } = useAuthContext();
   const router = useRouter();
@@ -31,7 +33,7 @@ export default function LoginPage() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
-    fetchLogin(cpf).then(response => {
+    fetchLogin(cpf, senha).then(response => {
       setIsLoading(false);
       if (response && !response.startsWith('Failed to fetch')) {
         setToken(response);
@@ -51,10 +53,14 @@ export default function LoginPage() {
 
         <LoginForm onSubmit={handleSubmit}>
           <Cpf value={cpf} onChange={e => setCpf(e.value)} />
+          <Password
+            value={senha}
+            onChange={e => setSenha(e.target.value.trim())}
+          />
           <Button
             label="Entrar"
             loading={isLoading}
-            disabled={cpf.replaceAll('_', '').length < 11}
+            disabled={cpf.replaceAll('_', '').length < 11 || senha.length < 6}
           />
         </LoginForm>
       </div>

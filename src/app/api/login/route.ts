@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { cpf } = await req.json();
+    const { id, password } = await req.json();
 
     const apiBaseUrl = process.env.API_BASE_URL || '';
 
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: cpf }),
+      body: JSON.stringify({ id, password }),
       cache: 'no-store',
     });
 
