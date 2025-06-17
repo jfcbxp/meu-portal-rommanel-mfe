@@ -1,6 +1,6 @@
 export const fetchLogin = async (
-  cpf: string,
-  senha: string,
+  id: string,
+  password: string,
 ): Promise<string> => {
   try {
     const url = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/api/login`;
@@ -10,7 +10,7 @@ export const fetchLogin = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ cpf, senha }),
+      body: JSON.stringify({ id, password }),
     });
 
     if (!response.ok) {
