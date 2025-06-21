@@ -36,24 +36,32 @@ export default function OrderContentComponent({
 
   const handleCopy = () => {
     if (order?.barcode) {
-      toast.current?.show({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Código de barras copiado!',
-        life: 3000,
-      });
-      setButtonDisabled(true);
-      setTimeout(() => setButtonDisabled(false), 5000);
-
-      navigator.clipboard.writeText(order.barcode).catch(err => {
-        console.error('Failed to copy text: ', err);
+      const textarea = document.createElement('textarea');
+      textarea.value = order.barcode;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Código de barras copiado!',
+          life: 3000,
+        });
+        setButtonDisabled(true);
+        setTimeout(() => setButtonDisabled(false), 5000);
+      } catch (err) {
         toast.current?.show({
           severity: 'error',
           summary: 'Erro',
           detail: 'Falha ao copiar código de barras.',
           life: 3000,
         });
-      });
+      }
+      document.body.removeChild(textarea);
     }
   };
 
