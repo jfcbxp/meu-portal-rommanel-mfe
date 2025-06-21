@@ -52,7 +52,9 @@ export default function OrdersFilter(properties: Readonly<OrdersFilterProps>) {
               <FilterButton
                 key={paymentType.code}
                 label={paymentType.description}
-                $active={properties.paymentTypeActive === paymentType}
+                $active={
+                  properties.paymentTypeActive?.code === paymentType.code
+                }
                 onClick={() =>
                   properties.paymentTypeActive?.code === paymentType.code
                     ? properties.setPaymentTypeActive(undefined)
@@ -67,7 +69,7 @@ export default function OrdersFilter(properties: Readonly<OrdersFilterProps>) {
               <FilterButton
                 key={item.code}
                 label={item.description}
-                $active={properties.statusActive === item}
+                $active={properties.statusActive?.code === item.code}
                 onClick={() =>
                   properties.statusActive?.code === item.code
                     ? properties.setStatusActive(undefined)
@@ -82,7 +84,7 @@ export default function OrdersFilter(properties: Readonly<OrdersFilterProps>) {
               <FilterButton
                 key={period.code}
                 label={period.description}
-                $active={properties.periodActive === period}
+                $active={properties.periodActive?.code === period.code}
                 onClick={() =>
                   properties.periodActive?.code === period.code
                     ? properties.setPeriodActive(undefined)
@@ -134,7 +136,7 @@ export default function OrdersFilter(properties: Readonly<OrdersFilterProps>) {
             <FilterButton
               key={paymentType.code}
               label={paymentType.description}
-              $active={properties.paymentTypeActive === paymentType}
+              $active={properties.paymentTypeActive?.code === paymentType.code}
               onClick={() =>
                 properties.paymentTypeActive?.code === paymentType.code
                   ? properties.setPaymentTypeActive(undefined)
@@ -149,7 +151,7 @@ export default function OrdersFilter(properties: Readonly<OrdersFilterProps>) {
             <FilterButton
               key={item.code}
               label={item.description}
-              $active={properties.statusActive === item}
+              $active={properties.statusActive?.code === item.code}
               onClick={() =>
                 properties.statusActive?.code === item.code
                   ? properties.setStatusActive(undefined)
@@ -164,7 +166,7 @@ export default function OrdersFilter(properties: Readonly<OrdersFilterProps>) {
             <FilterButton
               key={period.code}
               label={period.description}
-              $active={properties.periodActive === period}
+              $active={properties.periodActive?.code === period.code}
               onClick={() =>
                 properties.periodActive?.code === period.code
                   ? properties.setPeriodActive(undefined)

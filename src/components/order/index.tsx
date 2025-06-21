@@ -1,10 +1,10 @@
 import { OrderContent } from '@/types/index';
+import { useRef, useState } from 'react';
 
 import StatusChip from '../labels/statusChip';
 import OrderItems from '../lists/orders/items';
 import Button from '../buttons/button';
 import { FaBarcode, FaClipboard, FaMoneyBill, FaQrcode } from 'react-icons/fa';
-import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import toBRL from '@/utils/toBRL';
 import {
@@ -32,33 +32,34 @@ export default function OrderContentComponent({
   items,
 }: Readonly<Properties>) {
   const toast = useRef<Toast>(null);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const handleCopy = () => {
     if (order?.barcode) {
-      navigator.clipboard
-        .writeText(order.barcode)
-        .then(() => {
-          toast.current?.show({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Código de barras copiado!',
-            life: 3000,
-          });
-        })
-        .catch(err => {
-          console.error('Failed to copy text: ', err);
-          toast.current?.show({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Falha ao copiar código de barras.',
-            life: 3000,
-          });
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: 'Código de barras copiado!',
+        life: 3000,
+      });
+      setButtonDisabled(true);
+      setTimeout(() => setButtonDisabled(false), 5000);
+
+      navigator.clipboard.writeText(order.barcode).catch(err => {
+        console.error('Failed to copy text: ', err);
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Falha ao copiar código de barras.',
+          life: 3000,
         });
+      });
     }
   };
 
   return (
     <Container>
+      <Toast ref={toast} position="bottom-center" />
       <OrderInfoContainer>
         <OrderNumber>{`Valor referente a parcela nº ${order.installment}`}</OrderNumber>
         <OrderBalance>{`${toBRL(
@@ -104,7 +105,7 @@ export default function OrderContentComponent({
         label={
           order.type == 'BOL' ? 'Copiar Código de Barras' : 'Copiar Código Pix'
         }
-        disabled={!order.barcode}
+        disabled={!order.barcode || buttonDisabled}
         onClick={handleCopy}
       />
     </Container>

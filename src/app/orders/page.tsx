@@ -28,10 +28,18 @@ import LoadingComponent from '@/components/loading';
 export default function OrdersPage() {
   const [paymentTypes, setPaymentTypes] = useState<CnD[]>([]);
   const [status, setStatus] = useState<CnD[]>([]);
-  const [periods, setPeriods] = useState<CnD[]>([]);
+  const [periods, setPeriods] = useState<CnD[]>([
+    {
+      code: '60',
+      description: '',
+    },
+  ]);
   const [paymentTypeActive, setPaymentTypeActive] = useState<CnD>();
   const [statusActive, setStatusActive] = useState<CnD>();
-  const [periodActive, setPeriodActive] = useState<CnD>();
+  const [periodActive, setPeriodActive] = useState<CnD>({
+    code: '60',
+    description: '',
+  });
   const isMobile = useIsMobile();
   const [showPaginator, setShowPaginator] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -163,7 +171,12 @@ export default function OrdersPage() {
           <i>i</i>
         </ToastInfoIcon>
         <ToastInfoText>
-          Pagamentos podem demorar até 3 dias para serem atualizados
+          Os pagamentos poderão levar até 3 (três) dias úteis para serem
+          devidamente atualizados nos sistemas.
+          <br />
+          <br />
+          Boletos e notas promissórias em atraso poderão sofrer acréscimo de
+          multa e juros, caso sejam pagos no caixa ou no setor de cobrança.
         </ToastInfoText>
       </ToastContainer>
 
