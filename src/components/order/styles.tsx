@@ -7,7 +7,7 @@ export const Container = styled.main`
 `;
 
 export const OrderInfoContainer = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.large};
+  margin-bottom: ${({ theme }) => theme.spacing.small};
 `;
 
 export const OrderNumber = styled.p`
@@ -66,7 +66,7 @@ export const SectionTitle = styled.h2`
 `;
 
 export const StyledDivider = styled.div`
-  margin: ${({ theme }) => theme.spacing.large} 0;
+  margin: ${({ theme }) => theme.spacing.small} 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
 `;
 
