@@ -1,4 +1,4 @@
-import { OrderContent } from '@/types/index';
+import { OrderContent, Payment } from '@/types/index';
 import { useRef, useState } from 'react';
 
 import StatusChip from '../labels/statusChip';
@@ -12,6 +12,8 @@ import {
   DetailItem,
   DetailItemRight,
   DetailsRow,
+  DialogContent,
+  DialogPanel,
   OrderAmount,
   OrderBalance,
   OrderInfoContainer,
@@ -21,6 +23,9 @@ import {
   SectionTitle,
   StyledDivider,
 } from './styles';
+import { Dialog } from 'primereact/dialog';
+import { fecthPayment } from 'src/services/fetchPayment';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 interface Properties {
   order: OrderContent;
@@ -32,7 +37,35 @@ export default function OrderContentComponent({
   items,
 }: Readonly<Properties>) {
   const toast = useRef<Toast>(null);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const buttonDisabled_ =
+    (order.type == 'BOL' && order.barcode !== '') || order.type !== 'BOL';
+  const [buttonDisabled, setButtonDisabled] = useState(!buttonDisabled_);
+  const [showDialog, setShowDialog] = useState(false);
+  const [payment, setPayment] = useState<Payment | undefined>();
+  const token = useAuthContext().token;
+
+  const showPayment = async (order: OrderContent) => {
+    await fecthPayment(
+      token,
+      order.branch,
+      order.document,
+      order.version,
+      order.type,
+      order.installment,
+    ).then(data => {
+      if (typeof data === 'string') {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Erro',
+          detail: data,
+          life: 3000,
+        });
+      } else {
+        setPayment(data);
+        setShowDialog(!showDialog);
+      }
+    });
+  };
 
   const handleCopy = () => {
     if (order?.barcode) {
@@ -108,14 +141,52 @@ export default function OrderContentComponent({
         </PaymentMethodRow>
       </PaymentMethodContainer>
 
-      <Button
-        icon={<FaClipboard size={24} style={{ marginRight: '0.5rem' }} />}
-        label={
-          order.type == 'BOL' ? 'Copiar Código de Barras' : 'Copiar Código Pix'
-        }
-        disabled={!order.barcode || buttonDisabled}
-        onClick={handleCopy}
-      />
+      {order.status !== 'Pago' && (
+        <Button
+          icon={
+            order.type == 'BOL' ? (
+              <FaClipboard size={24} style={{ marginRight: '0.5rem' }} />
+            ) : (
+              <FaMoneyBill size={24} style={{ marginRight: '0.5rem' }} />
+            )
+          }
+          label={order.type == 'BOL' ? 'Copiar Código de Barras' : 'Pagar'}
+          disabled={buttonDisabled}
+          onClick={() => showPayment(order)}
+        />
+      )}
+
+      {showDialog && payment && (
+        <Dialog
+          visible={showDialog}
+          onHide={() => setShowDialog(false)}
+          header={`Pagamento da Parcela nº ${order.installment}`}
+          draggable={false}
+          style={{ margin: '1rem' }}
+        >
+          <DialogContent>
+            <DialogPanel>
+              <div>
+                <h4>Valor original</h4>
+                <strong>{toBRL(payment.amount)}</strong>
+              </div>
+              <div>
+                <h4>Juros</h4>
+                <strong>{toBRL(payment.tax)}</strong>
+              </div>
+              <div>
+                <h4>Multa</h4>
+                <strong>{toBRL(payment.fee)}</strong>
+              </div>
+            </DialogPanel>
+            <Button
+              icon={<FaClipboard size={24} style={{ marginRight: '0.5rem' }} />}
+              label={'Copiar Chave Pix'}
+              onClick={handleCopy}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </Container>
   );
 }

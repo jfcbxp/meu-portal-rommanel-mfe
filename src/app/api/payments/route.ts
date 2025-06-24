@@ -29,3 +29,45 @@ export async function GET(req: NextRequest) {
   const data = await response.json();
   return NextResponse.json(data, { status: response.status });
 }
+
+export async function POST(req: NextRequest) {
+  try {
+    const { branch, document, version, type, installment } = await req.json();
+    const token = req.headers.get('authorization');
+    const apiBaseUrl = process.env.API_BASE_URL || '';
+
+    console.log(`${apiBaseUrl}/payments`);
+
+    const response = await fetch(`${apiBaseUrl}/payments`, {
+      method: 'POST',
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+      body: JSON.stringify({
+        branch,
+        document,
+        version,
+        type,
+        installment,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data?.message || 'Failed to fetch payment info' },
+        { status: response.status },
+      );
+    }
+
+    return NextResponse.json(data, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || 'Internal server error' },
+      { status: 500 },
+    );
+  }
+}
