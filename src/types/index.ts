@@ -64,3 +64,13 @@ export interface OrderItemContent {
   total: number;
   image?: string;
 }
+
+export interface Payment {
+  balance: number;
+  discount: number;
+  fee: number;
+  tax: number;
+  amount: number;
+  total: number;
+  pix: string;
+}

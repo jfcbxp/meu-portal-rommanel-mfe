@@ -91,20 +91,26 @@ export const PaymentMethodRow = styled.div`
 `;
 
 export const DialogContent = styled.div`
-  display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
-  margin: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => theme.spacing.medium};
+  background-color: whitesmoke;
+  justify-content: center;
+  align-items: flex-start;
 `;
 
 export const DialogPanel = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
+  width: 100%;
+  background-color: white;
+  padding: ${({ theme }) => theme.spacing.medium};
   div {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 
     h4 {
       font-size: 1rem;
