@@ -9,7 +9,6 @@ const Warning: React.FC<WarningProperties> = ({ children }) => {
   return (
     <S.WarningWrapper>
       <S.IconWrapper>
-        {/* Placeholder for info icon */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"

@@ -13,6 +13,7 @@ interface OrderDetailContentProps {
   items?: OrderContent['items'];
   showPaginator: boolean;
   setShowPaginator: (show: boolean) => void;
+  isMobile: boolean;
 }
 
 function OrderDetailContent(properties: Readonly<OrderDetailContentProps>) {
@@ -49,6 +50,7 @@ function OrderDetailContent(properties: Readonly<OrderDetailContentProps>) {
       <OrderContentComponent
         order={properties.order}
         items={properties.items}
+        isMobile={properties.isMobile}
       />
     </FullScreenModal>
   );
@@ -60,6 +62,7 @@ interface OrderDetailsProps {
   setVisible: (visible: boolean) => void;
   showPaginator: boolean;
   setShowPaginator: (show: boolean) => void;
+  isMobile: boolean;
 }
 
 export default function OrderDetails(properties: Readonly<OrderDetailsProps>) {
@@ -71,6 +74,7 @@ export default function OrderDetails(properties: Readonly<OrderDetailsProps>) {
         setVisible={properties.setVisible}
         showPaginator={properties.showPaginator}
         setShowPaginator={properties.setShowPaginator}
+        isMobile={properties.isMobile}
       />
     </Suspense>
   );

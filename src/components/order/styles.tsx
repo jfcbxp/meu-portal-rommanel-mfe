@@ -89,3 +89,41 @@ export const PaymentMethodRow = styled.div`
     color: ${({ theme }) => theme.colors.text};
   }
 `;
+
+export const DialogContent = styled.div`
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => theme.spacing.medium};
+  background-color: whitesmoke;
+  justify-content: center;
+  align-items: flex-start;
+`;
+
+export const DialogPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.medium};
+  width: 100%;
+  background-color: white;
+  padding: ${({ theme }) => theme.spacing.medium};
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: ${({ theme }) => theme.colors.textLight};
+      margin: 0;
+    }
+
+    p {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: ${({ theme }) => theme.colors.text};
+      margin: 0;
+    }
+  }
+`;
