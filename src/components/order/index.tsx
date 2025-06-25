@@ -69,7 +69,7 @@ export default function OrderContentComponent({
         toast.current?.show({
           severity: 'error',
           summary: 'Erro ao criar o checkout de pagamento',
-          detail: data,
+          detail: 'tente novamente mais tarde',
           life: 3000,
         });
       } else {
@@ -110,25 +110,33 @@ export default function OrderContentComponent({
       document.body.removeChild(textarea);
     } else {
       setShowConfirmation(true);
-      navigator.clipboard
-        .writeText(payment?.pix || '')
-        .then(() => {
-          toast.current?.show({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Chave Pix copiada!',
-            life: 3000,
-          });
-          setShowConfirmation(true);
-        })
-        .catch(() => {
-          toast.current?.show({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Falha ao copiar chave Pix.',
-            life: 3000,
-          });
+      const textarea = document.createElement('textarea');
+      textarea.value = payment?.pix || '';
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Chave Pix copiada!',
+          life: 3000,
         });
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error('Erro ao copiar chave pix:', err.message);
+        }
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Falha ao copiar chave pix.',
+          life: 3000,
+        });
+      }
+      document.body.removeChild(textarea);
     }
   };
 
