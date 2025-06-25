@@ -100,6 +100,7 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
         items={orderItems}
         showPaginator={properties.showPaginator}
         setShowPaginator={properties.setShowPaginator}
+        isMobile={isMobile}
       />
     );
   }
@@ -155,7 +156,11 @@ export default function OrderItemComponent(properties: Readonly<Properties>) {
       {isOpened && (
         <div style={{ width: '100%' }}>
           {isError && <div>Erro ao carregar itens do pedido.</div>}
-          <OrderContentComponent order={properties.order} items={orderItems} />
+          <OrderContentComponent
+            order={properties.order}
+            items={orderItems}
+            isMobile={isMobile}
+          />
         </div>
       )}
     </CardContainer>

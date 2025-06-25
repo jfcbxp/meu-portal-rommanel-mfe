@@ -40,11 +40,13 @@ import { jwtDecode } from 'jwt-decode';
 interface Properties {
   order: OrderContent;
   items?: OrderContent['items'];
+  isMobile: boolean;
 }
 
 export default function OrderContentComponent({
   order,
   items,
+  isMobile,
 }: Readonly<Properties>) {
   const toast = useRef<Toast>(null);
   const [showDialog, setShowDialog] = useState(false);
@@ -52,6 +54,7 @@ export default function OrderContentComponent({
   const [showInnerConfirmation, setShowInnerConfirmation] = useState(false);
   const [payment, setPayment] = useState<Payment | undefined>();
   const token = useAuthContext().token;
+  const [payButtonDisabled, setPayButtonDisabled] = useState(false);
 
   const showPayment = async (order: OrderContent) => {
     await fecthPayment(
@@ -65,7 +68,7 @@ export default function OrderContentComponent({
       if (typeof data === 'string') {
         toast.current?.show({
           severity: 'error',
-          summary: 'Erro',
+          summary: 'Erro ao criar o checkout de pagamento',
           detail: data,
           life: 3000,
         });
@@ -185,12 +188,16 @@ export default function OrderContentComponent({
         <Button
           icon={<FaMoneyBill size={24} style={{ marginRight: '0.5rem' }} />}
           label={'Pagar'}
+          disabled={payButtonDisabled}
+          loading={payButtonDisabled}
           onClick={() => {
+            setPayButtonDisabled(true);
             if (order.type !== 'BOL') {
               showPayment(order);
             } else {
               setShowDialog(true);
             }
+            setTimeout(() => setPayButtonDisabled(false), 3000);
           }}
         />
       )}
@@ -202,13 +209,16 @@ export default function OrderContentComponent({
             setShowConfirmation(false);
             setShowInnerConfirmation(false);
           }}
+          maximized={isMobile}
+          style={{ minWidth: isMobile ? '100%' : '50%' }}
           header={`Pagamento da Parcela nº ${order.installment}`}
           draggable={false}
           headerStyle={{
             width: '100%',
-            padding: '1rem',
+            padding: '16px',
             backgroundColor: 'whitesmoke',
           }}
+          contentStyle={{ padding: '24px', backgroundColor: 'whitesmoke' }}
         >
           <DialogContent
             style={{ display: !showConfirmation ? 'flex' : 'none' }}
@@ -277,6 +287,7 @@ export default function OrderContentComponent({
                   border: '1px solid silver',
                   padding: '0.5rem',
                   borderRadius: '0.5rem',
+                  overflow: 'hidden',
                 }}
               >
                 {(() => {
