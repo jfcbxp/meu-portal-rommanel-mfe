@@ -36,8 +36,6 @@ export async function POST(req: NextRequest) {
     const token = req.headers.get('authorization');
     const apiBaseUrl = process.env.API_BASE_URL || '';
 
-    console.log(`${apiBaseUrl}/payments`);
-
     const response = await fetch(`${apiBaseUrl}/payments`, {
       method: 'POST',
       headers: {

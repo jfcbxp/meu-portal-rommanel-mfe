@@ -47,9 +47,6 @@ export default function OrderContentComponent({
   items,
 }: Readonly<Properties>) {
   const toast = useRef<Toast>(null);
-  /* const buttonDisabled_ =
-    (order.type == 'BOL' && order.barcode !== '') || order.type !== 'BOL';
-  const [buttonDisabled, setButtonDisabled] = useState(!buttonDisabled_); */
   const [showDialog, setShowDialog] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showInnerConfirmation, setShowInnerConfirmation] = useState(false);
@@ -80,7 +77,6 @@ export default function OrderContentComponent({
   };
 
   const handleCopy = () => {
-    // If the order has a barcode, copy it to
     if (order?.barcode && order.type === 'BOL') {
       const textarea = document.createElement('textarea');
       textarea.value = order.barcode;
@@ -97,11 +93,8 @@ export default function OrderContentComponent({
           detail: 'Código de barras copiado!',
           life: 3000,
         });
-        /* setButtonDisabled(true);
-        setTimeout(() => setButtonDisabled(false), 5000); */
       } catch (err) {
         if (err instanceof Error) {
-          // Optionally log the error for debugging
           console.error('Erro ao copiar código de barras:', err.message);
         }
         toast.current?.show({
@@ -113,7 +106,6 @@ export default function OrderContentComponent({
       }
       document.body.removeChild(textarea);
     } else {
-      // If the order has a payment pix, copy it to clipboard
       setShowConfirmation(true);
       navigator.clipboard
         .writeText(payment?.pix || '')
@@ -144,9 +136,7 @@ export default function OrderContentComponent({
     }
     phone = `55${phone}`;
     let text = `Olá, eu sou cliente, me chamo ${name} e gostaria de enviar o comprovante de pagamento da parcela nº ${order.installment} do pedido ${order.document}.`;
-    // Codifica o texto para URL
     const encodedText = encodeURIComponent(text);
-    // Monta o link do WhatsApp Web
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodedText}`;
     window.open(url, '_blank');
   };
@@ -195,7 +185,6 @@ export default function OrderContentComponent({
         <Button
           icon={<FaMoneyBill size={24} style={{ marginRight: '0.5rem' }} />}
           label={'Pagar'}
-          /* disabled={buttonDisabled} */
           onClick={() => {
             if (order.type !== 'BOL') {
               showPayment(order);
