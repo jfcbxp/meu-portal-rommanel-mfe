@@ -24,7 +24,7 @@ export const OrderBalance = styled.p`
 `;
 
 export const OrderAmount = styled.p`
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.textLight};
   margin: 0 0 ${({ theme }) => theme.spacing.medium};
