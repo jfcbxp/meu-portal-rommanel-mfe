@@ -157,12 +157,14 @@ export default function OrderContentComponent({
       <Toast ref={toast} position="bottom-center" />
       <OrderInfoContainer>
         <OrderNumber>{`Valor referente a parcela nº ${order.installment}`}</OrderNumber>
-        <OrderBalance>{`${toBRL(
-          order.balance > 0 ? order.balance : order.amount,
-        )}`}</OrderBalance>
-        {order.status === 'Pago Parcialmente' && (
-          <OrderAmount>{`${toBRL(order.amount)}`}</OrderAmount>
-        )}
+        <DetailsRow>
+          <OrderBalance>{`${toBRL(
+            order.balance > 0 ? order.balance : order.amount,
+          )}`}</OrderBalance>
+          {order.status === 'Pago Parcialmente' && (
+            <OrderAmount>{`${toBRL(order.amount)}`}</OrderAmount>
+          )}
+        </DetailsRow>
         <DetailsRow>
           <DetailItem>
             <p>Quantidade</p>
@@ -212,6 +214,7 @@ export default function OrderContentComponent({
       {showDialog && (
         <Dialog
           visible={showDialog}
+          blockScroll
           onHide={() => {
             setShowDialog(false);
             setShowConfirmation(false);
