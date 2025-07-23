@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo_grande from '../../../public/logo_grande.png';
-import Cgc from '@/components/inputs/cpf';
+import Cgc from '@/components/inputs/cgc';
 import Button from '@/components/buttons/button';
 import useIsMobile from '@/hooks/useIsMobile';
 import { fetchLogin } from '../../services/fetchLogin';
